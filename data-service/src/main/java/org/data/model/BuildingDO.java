@@ -1,5 +1,5 @@
 package org.data.model;
 
-public class Building {
+public class BuildingDO {
 
 }
