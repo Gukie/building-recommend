@@ -2,9 +2,9 @@ package org.data.dao;
 
 import org.data.model.BuildingDO;
 
-public interface BuildingDAO {
+public interface BuildingDAO extends BaseDAO{
 
-	Integer  insert(BuildingDO building);
+	int insert(BuildingDO building);
 	
 	BuildingDO getById(Integer id);
 }
