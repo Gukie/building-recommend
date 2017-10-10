@@ -2,8 +2,10 @@ package org.data.service.impl;
 
 import org.common.model.BuildingDTO;
 import org.data.dao.BuildingDAO;
+import org.data.enums.DBTableEnum;
 import org.data.model.BuildingDO;
 import org.data.service.DataService;
+import org.data.utils.GeneratorUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,13 @@ public class DataServiceImpl implements DataService{
 	@Autowired
 	private BuildingDAO buildingDAO;
 	
+	private GeneratorUtils generator;
+	
 	public String add(BuildingDTO buildingDTO) {
 
 		BuildingDO buildingDO = convert2DO(buildingDTO);
+		String id = generator.generateId(DBTableEnum.building);
+		buildingDO.setId(id);
 		buildingDAO.insert(buildingDO);
 		return buildingDO.getId();
 	}
