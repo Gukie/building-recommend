@@ -2,6 +2,7 @@ package org.crawl.service.client;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author gushu
@@ -11,5 +12,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface DataServiceClient {
 
 	@RequestMapping("/store")
-	String addBuilding(String buildingJsonStr);
+	String addBuilding(@RequestParam("buildingJsonStr") String buildingJsonStr);
+	
+	@RequestMapping("/test")
+	String test(@RequestParam("test") String test);
+	
+//	@RequestMapping(value="/store",method=RequestMethod.POST,consumes = "application/json")
+//	String addBuilding( @RequestParam("buildingJsonStr") String buildingJsonStr);
+	
+//	@RequestMapping(value="/store",method=RequestMethod.POST,consumes = "application/json")
+//	String addBuilding( String buildingJsonStr);
+	
+//	@RequestMapping(value="/store",method=RequestMethod.POST,consumes = "application/json")
+//	String addBuilding( @HeaderParam("buildingJsonStr") String buildingJsonStr);
+	
+//	@RequestMapping(value="/store",method=RequestMethod.POST,consumes = "application/json")
+//	@RequestLine("POST /store")
+//	String addBuilding( @Param("buildingJsonStr") String buildingJsonStr);
+	
+//	@RequestMapping(value="/store",method=RequestMethod.POST)
+//	String addBuilding( String buildingJsonStr);
+	
 }

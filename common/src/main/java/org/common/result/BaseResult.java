@@ -7,4 +7,6 @@ package org.common.result;
 public class BaseResult {
 
 	public final static String SUCCESS = "success";
+	
+	public final static String FAIL = "fail";
 }

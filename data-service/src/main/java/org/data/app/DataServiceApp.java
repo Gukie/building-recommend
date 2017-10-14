@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication(scanBasePackages="org.data")
 @MapperScan("org.data.dao")
 @EnableEurekaClient
+//@FeignClient
 @RestController
 public class DataServiceApp 
 {
@@ -31,11 +32,23 @@ public class DataServiceApp
     @Resource(name="dataService")
     private DataService dataService;
     
-    @RequestMapping("/store")
+//    @RequestMapping(value="/store",method=RequestMethod.POST)
+//    public String store(@RequestParam("buildingJsonStr") String buildingJsonStr) {
+//    @RequestMapping(value="/store",method=RequestMethod.POST,consumes = "application/json")
+//    public String store(@RequestParam("buildingJsonStr") String buildingJsonStr) {
+    
+    
+    @RequestMapping(value="/store")
     public String store(String buildingJsonStr) {
 		
     	BuildingDTO buildingDTO = JSON.parseObject(buildingJsonStr, BuildingDTO.class);
     	dataService.add(buildingDTO);
+    	return BaseResult.SUCCESS;
+	}
+    
+    @RequestMapping(value="/test")
+    public String test(String test) {
+    	System.out.println(test);
     	return BaseResult.SUCCESS;
 	}
     
