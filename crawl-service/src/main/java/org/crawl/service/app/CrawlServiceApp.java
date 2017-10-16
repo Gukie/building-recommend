@@ -48,6 +48,9 @@ public class CrawlServiceApp
     	buildingDTO.setName("first building");
     	buildingDTO.setPlate("川西");
     	try {
+//    		ObjectMapper objectMapper = new ObjectMapper();
+//    		String passedValu = objectMapper.writeValueAsString(buildingDTO);
+//    		dataServiceClient.addBuilding(passedValu);
     		dataServiceClient.addBuilding(JSON.toJSONString(buildingDTO));
     		return BaseResult.SUCCESS;
 		} catch (Exception e) {
