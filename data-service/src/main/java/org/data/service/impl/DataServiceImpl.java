@@ -20,6 +20,7 @@ public class DataServiceImpl implements DataService{
 	@Autowired
 	private BuildingDAO buildingDAO;
 	
+	@Autowired
 	private GeneratorUtils generator;
 	
 	public String add(BuildingDTO buildingDTO) {

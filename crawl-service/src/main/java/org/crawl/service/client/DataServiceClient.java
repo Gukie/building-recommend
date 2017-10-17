@@ -18,6 +18,9 @@ public interface DataServiceClient {
 
 	@RequestMapping("/test")
 	String test(@RequestParam("test") String test);
+	
+	@RequestMapping("/hello")
+	String hello(@RequestParam("content") String content);
 
 	// @RequestMapping(value="/store",method=RequestMethod.POST,consumes =
 	// "application/json")

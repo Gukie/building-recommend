@@ -1,5 +1,7 @@
 package org.crawl.service.app;
 
+import java.net.URLEncoder;
+
 import com.alibaba.fastjson.JSON;
 
 import org.common.model.BuildingDTO;
@@ -62,6 +64,20 @@ public class CrawlServiceApp
 //    	
 //    	return restTemplate.postForObject("http://data-service/store", JSON.toJSONString(buildingDTO), String.class,params);
     	
+    }
+    
+    @RequestMapping("/hello")
+    public String hello(){
+    	BuildingDTO buildingDTO = new BuildingDTO();
+    	buildingDTO.setName("first building");
+    	buildingDTO.setPlate("川西");
+    	try {
+    		dataServiceClient.hello(URLEncoder.encode(JSON.toJSONString(buildingDTO),"UTF-8"));
+    		return BaseResult.SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return BaseResult.FAIL;
     }
     
     @RequestMapping("/test")
