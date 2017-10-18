@@ -22,6 +22,8 @@
 		<mybatis.spring.boot.starter>1.3.0</mybatis.spring.boot.starter>
 		<mysql.connector>5.1.38</mysql.connector>
 		<fast.json.version>1.2.38</fast.json.version>
+		<http.client.version>4.5.2</http.client.version>
+		<jsoup.version>1.10.3</jsoup.version>
 	</properties>
 
 	<profiles>
@@ -135,6 +137,17 @@
 				<groupId>com.alibaba</groupId>
 				<artifactId>fastjson</artifactId>
 				<version>${fast.json.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>${http.client.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jsoup</groupId>
+				<artifactId>jsoup</artifactId>
+				<version>${jsoup.version}</version>
 			</dependency>
 
 		</dependencies>

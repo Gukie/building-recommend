@@ -19,6 +19,7 @@ public class BuildingDTO implements Serializable{
 	private String totalPrice;
 	private Date gmtCreated;
 	private Date gmtModified;
+	private String source; // zhujiayi, lianjia
 	
 	public String getId() {
 		return id;
@@ -67,5 +68,11 @@ public class BuildingDTO implements Serializable{
 	}
 	public void setGmtModified(Date gmtModified) {
 		this.gmtModified = gmtModified;
+	}
+	public String getSource() {
+		return source;
+	}
+	public void setSource(String source) {
+		this.source = source;
 	}
 }

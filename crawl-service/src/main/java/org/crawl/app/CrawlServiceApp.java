@@ -1,12 +1,16 @@
-package org.crawl.service.app;
+package org.crawl.app;
 
 import java.net.URLEncoder;
+
+import javax.annotation.Resource;
 
 import com.alibaba.fastjson.JSON;
 
 import org.common.model.BuildingDTO;
 import org.common.result.BaseResult;
-import org.crawl.service.client.DataServiceClient;
+import org.crawl.client.DataServiceClient;
+import org.crawl.service.CrawlService;
+import org.crawl.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,38 +36,37 @@ public class CrawlServiceApp
         SpringApplication.run(CrawlServiceApp.class, args);
     }
     
-//    @Bean
-//    @LoadBalanced
-//    RestTemplate restTemplate(){
-//      return new RestTemplate();
-//    }
-    
     @Autowired
     private DataServiceClient dataServiceClient;
     
-//    @Autowired
-//    private RestTemplate restTemplate;
+    @Resource(name="crawlService")
+    private CrawlService crawlService;
+    
+    @Resource(name="storeService")
+    private StoreService storeService;
+    
     
     @RequestMapping("/start")
     public String start(){
-    	BuildingDTO buildingDTO = new BuildingDTO();
-    	buildingDTO.setName("first building");
-    	buildingDTO.setPlate("川西");
+//    	BuildingDTO buildingDTO = new BuildingDTO();
+//    	buildingDTO.setName("first building");
+//    	buildingDTO.setPlate("川西");
+//    	try {
+//    		dataServiceClient.addBuilding(JSON.toJSONString(buildingDTO));
+//    		return BaseResult.SUCCESS;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//    	return BaseResult.FAIL;
+    	
     	try {
-//    		ObjectMapper objectMapper = new ObjectMapper();
-//    		String passedValu = objectMapper.writeValueAsString(buildingDTO);
-//    		dataServiceClient.addBuilding(passedValu);
-    		dataServiceClient.addBuilding(JSON.toJSONString(buildingDTO));
+    		crawlService.crawl();
+    		storeService.store();
     		return BaseResult.SUCCESS;
-		} catch (Exception e) {
+    	}catch (Exception e) {
 			e.printStackTrace();
 		}
     	return BaseResult.FAIL;
-//    	Map<String, String> params = new HashMap<String, String>();
-//    	params.put("buildingJsonStr", JSON.toJSONString(buildingDTO));
-//    	
-//    	return restTemplate.postForObject("http://data-service/store", JSON.toJSONString(buildingDTO), String.class,params);
-    	
     }
     
     @RequestMapping("/hello")

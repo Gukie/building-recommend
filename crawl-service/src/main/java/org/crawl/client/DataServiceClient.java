@@ -1,4 +1,4 @@
-package org.crawl.service.client;
+package org.crawl.client;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.MediaType;

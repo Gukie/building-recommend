@@ -1,4 +1,4 @@
-package org.crawl.service.bean;
+package org.crawl.bean;
 
 import org.springframework.stereotype.Component;
 
