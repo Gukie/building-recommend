@@ -1,7 +1,6 @@
 package org.data.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.data.enums.DBTableEnum;
 import org.springframework.stereotype.Component;
@@ -13,16 +12,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class GeneratorUtils {
 
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+	private AtomicInteger counter = new AtomicInteger(1);
 
 	public String generateId(DBTableEnum tableEnum) {
+		StringBuilder result = new StringBuilder();
 		String prefix = tableEnum.getValue();
-		String value = dateFormat.format(new Date());
-		return prefix + value;
+		result.append(prefix).append(System.currentTimeMillis()).append(counter.incrementAndGet());
+		return result.toString();
 	}
 	
 //	public static void main(String[] args) {
 //		GeneratorUtils test = new GeneratorUtils();
 //		System.out.println(test.generateId(DBTableEnum.building));
+//		
+//		System.out.println(System.currentTimeMillis());
 //	}
 }
