@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * crawl service
  *
  */
-@SpringBootApplication(scanBasePackages="org.crawl.service.bean")
+@SpringBootApplication(scanBasePackages={"org.crawl.service.bean","org.crawl.service"})
 @EnableEurekaClient
-@EnableFeignClients(basePackages="org.crawl.service.client")
+@EnableFeignClients(basePackages="org.crawl.client")
 @Controller
 public class CrawlServiceApp 
 {
@@ -60,8 +60,13 @@ public class CrawlServiceApp
 //    	return BaseResult.FAIL;
     	
     	try {
-    		crawlService.crawl();
-    		storeService.store();
+    		Thread thread = new Thread(new Runnable() {
+				public void run() {
+					crawlService.crawl();
+		    		storeService.store();
+				}
+			});
+    		thread.start();
     		return BaseResult.SUCCESS;
     	}catch (Exception e) {
 			e.printStackTrace();
