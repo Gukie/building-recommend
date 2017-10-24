@@ -1,6 +1,7 @@
 package org.crawl.service.impl;
 
-import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import com.alibaba.fastjson.JSON;
 
@@ -23,13 +24,23 @@ public class StoreServiceImpl implements StoreService {
     private DataServiceClient dataServiceClient;
 	
 	public void store() {
-		List<BuildingDTO> buildingDTOList = PoolUtils.BUILDING_POOL;
+		BlockingQueue<BuildingDTO> buildingDTOList = PoolUtils.BUILDING_POOL;
 		if(CollectionUtils.isEmpty(buildingDTOList)){
 			return;
 		}
-		for(BuildingDTO item: buildingDTOList){
-			dataServiceClient.addBuilding(JSON.toJSONString(item));
+		try {
+			BuildingDTO buildingDTO = buildingDTOList.poll(100, TimeUnit.MILLISECONDS);
+			if(buildingDTO!=null){
+				dataServiceClient.addBuilding(JSON.toJSONString(buildingDTO));
+				System.out.println("added: "+PoolUtils.ADDED_COUNTER.incrementAndGet());
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+//		for(BuildingDTO item: buildingDTOList){
+//			dataServiceClient.addBuilding(JSON.toJSONString(item));
+//		}
 	}
 
 }

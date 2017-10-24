@@ -1,7 +1,8 @@
 package org.crawl.utils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.common.model.BuildingDTO;
 
@@ -11,7 +12,9 @@ import org.common.model.BuildingDTO;
  */
 public class PoolUtils {
 
-	private static final int factor = 2048;
+//	private static final int factor = 2048;
 	
-	public static final List<BuildingDTO> BUILDING_POOL = new ArrayList<BuildingDTO>(factor);
+	public static final BlockingQueue<BuildingDTO> BUILDING_POOL = new LinkedBlockingQueue<BuildingDTO>();
+	
+	public static final AtomicInteger ADDED_COUNTER = new AtomicInteger(0);
 }
