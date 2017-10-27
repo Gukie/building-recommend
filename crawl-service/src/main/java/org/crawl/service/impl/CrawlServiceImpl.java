@@ -1,14 +1,26 @@
 package org.crawl.service.impl;
 
-import java.util.concurrent.Executor;
+import java.util.List;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
+import org.common.model.BuildingDTO;
+import org.crawl.client.DataServiceClient;
 import org.crawl.service.CrawlService;
 import org.crawl.task.CrawlerTask;
 import org.crawl.task.impl.LianjiaCrawler;
 import org.crawl.task.impl.ZhujiayiCrawler;
 import org.crawl.utils.CrawlerUtils;
+import org.crawl.utils.PoolUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import com.alibaba.fastjson.JSON;
 
 /**
  * @author gushu
@@ -16,11 +28,25 @@ import org.springframework.stereotype.Service;
  */
 @Service("crawlService")
 public class CrawlServiceImpl implements CrawlService {
+	
+	private CompletionService<List<BuildingDTO>> completionService;
+	
+	@Autowired
+    private DataServiceClient dataServiceClient;
 
 	public void crawl() {
+		initCompletionService();
+		long start = System.currentTimeMillis();
 		crawlLianjia();
 		crawlZhujiayi();
-		// wait util all task finished
+		long end = System.currentTimeMillis();
+		System.out.println("all tasked finished. time consumed:"+(end-start));
+	}
+
+	private void initCompletionService() {
+		int threadNum = Runtime.getRuntime().availableProcessors()+1;
+		ExecutorService executorService =  Executors.newFixedThreadPool(threadNum);
+		completionService = new ExecutorCompletionService<List<BuildingDTO>>(executorService);
 	}
 	
 	private void crawlLianjia() {
@@ -32,17 +58,44 @@ public class CrawlServiceImpl implements CrawlService {
 			String subUrl = lianjiaCrawler.getSubUrl();
 			for(int i = 0 ;i<totalPage;i++) {
 				LianjiaCrawler crawler = new LianjiaCrawler(targetUrl+subUrl+i);
-				Thread thread = new Thread(crawler);
-				thread.start();
+				completionService.submit(crawler);
 			}
 		}
+		store(totalPage);
+		System.out.println(" crawlLianjia finished... ");
+	}
+
+	private void store(int taskNum) {
+		if(taskNum <1) {
+			return;
+		}
+		for(int i = 0;i<taskNum;i++) {
+			try {
+				Future<List<BuildingDTO>> result = completionService.take();
+				List<BuildingDTO> buildingDTOList = result.get();
+				if(CollectionUtils.isEmpty(buildingDTOList)) {
+					continue;
+				}
+				for(BuildingDTO item: buildingDTOList) {
+					dataServiceClient.addBuilding(JSON.toJSONString(item));
+					System.out.println("added:"+PoolUtils.ADDED_COUNTER.incrementAndGet());
+				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
 	private void crawlZhujiayi() {
 		
-		int threadNum = Runtime.getRuntime().availableProcessors()+1;
-		Executor executor = Executors.newFixedThreadPool(threadNum);
-			
+//		int threadNum = Runtime.getRuntime().availableProcessors()+1;
+//		Executor executor = Executors.newFixedThreadPool(threadNum);
+//			
 //		ExecutorCompletionService<CrawlerTask> executorCompletionService = new ExecutorCompletionService<CrawlerTask>(executor);
 		
 		String targetUrl = CrawlerUtils.crawlClassTargetUrlMap.get(ZhujiayiCrawler.class);
@@ -53,12 +106,11 @@ public class CrawlServiceImpl implements CrawlService {
 			String subUrl = crawler.getSubUrl();
 			for(int i = 0 ;i<=totalPage;i++) {
 				crawler = new ZhujiayiCrawler(targetUrl+subUrl+i);
-				executor.execute(crawler);
+				completionService.submit(crawler);
 			}
 				
 		}
-		
-		System.out.println("end...");
-		
+		store(totalPage);
+		System.out.println(" crawlZhujiayi finished... ");
 	}
 }

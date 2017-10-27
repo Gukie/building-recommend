@@ -4,8 +4,6 @@ import java.net.URLEncoder;
 
 import javax.annotation.Resource;
 
-import com.alibaba.fastjson.JSON;
-
 import org.common.model.BuildingDTO;
 import org.common.result.BaseResult;
 import org.crawl.client.DataServiceClient;
@@ -18,6 +16,8 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.alibaba.fastjson.JSON;
 
 /**
  * crawl service
@@ -48,22 +48,11 @@ public class CrawlServiceApp
     
     @RequestMapping("/start")
     public String start(){
-//    	BuildingDTO buildingDTO = new BuildingDTO();
-//    	buildingDTO.setName("first building");
-//    	buildingDTO.setPlate("川西");
-//    	try {
-//    		dataServiceClient.addBuilding(JSON.toJSONString(buildingDTO));
-//    		return BaseResult.SUCCESS;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//    	return BaseResult.FAIL;
-    	
     	try {
     		Thread thread = new Thread(new Runnable() {
 				public void run() {
 					crawlService.crawl();
-		    		storeService.store();
+//		    		storeService.store();
 				}
 			});
     		thread.start();

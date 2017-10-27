@@ -28,7 +28,12 @@ public class DataServiceImpl implements DataService{
 		BuildingDO buildingDO = convert2DO(buildingDTO);
 		String id = generator.generateId(DBTableEnum.building);
 		buildingDO.setId(id);
-		buildingDAO.insert(buildingDO);
+		try {
+			buildingDAO.insert(buildingDO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return buildingDO.getId();
 	}
 

@@ -1,14 +1,18 @@
 package org.crawl.task.impl;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
+import org.common.enums.BuildingSourceEnum;
+import org.common.model.BuildingDTO;
 import org.crawl.bean.BuildingPageInfo;
 import org.crawl.task.CrawlerTask;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class ZhujiayiCrawler extends AbstractCrawlerTask implements CrawlerTask , Runnable{
+public class ZhujiayiCrawler extends AbstractCrawlerTask implements CrawlerTask{
 	
 	String targetElement = ".bshadow.lpMode";
 	
@@ -17,6 +21,7 @@ public class ZhujiayiCrawler extends AbstractCrawlerTask implements CrawlerTask 
 	private String targetUrl;
 
 	public ZhujiayiCrawler(String targetUrl) {
+		init();
 		setTargetUrl(targetUrl);
 	}
 
@@ -38,10 +43,9 @@ public class ZhujiayiCrawler extends AbstractCrawlerTask implements CrawlerTask 
 		return targetElement;
 	}
 	
-	public void run() {
-		doCrawl();
-	}
-
+//	public void run() {
+//		doCrawl();
+//	}
 
 	@Override
 	public Elements parseAveragePrice(Element element) {
@@ -92,6 +96,17 @@ public class ZhujiayiCrawler extends AbstractCrawlerTask implements CrawlerTask 
 			return result;
 		}
 		return null;
+	}
+
+	@Override
+	protected void init() {
+		sourceEnum = BuildingSourceEnum.ZHU_JIA_YI;
+		crawledDataList = new ArrayList<BuildingDTO>();
+	}
+
+	public List<BuildingDTO> call() throws Exception {
+		doCrawl();
+		return crawledDataList;
 	}
 
 	

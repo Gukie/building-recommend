@@ -19,7 +19,7 @@ public class BuildingDAOTest extends BaseDAOTest{
 	}
 	
 	@SuppressWarnings("unchecked")
-	@Override
+	@Override 
 	protected BuildingDO generateDO() {
 		BuildingDO result = new BuildingDO();
 		result.setId("BD201709291957");

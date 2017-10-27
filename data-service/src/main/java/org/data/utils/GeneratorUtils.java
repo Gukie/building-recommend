@@ -21,10 +21,10 @@ public class GeneratorUtils {
 		return result.toString();
 	}
 	
-//	public static void main(String[] args) {
-//		GeneratorUtils test = new GeneratorUtils();
-//		System.out.println(test.generateId(DBTableEnum.building));
-//		
-//		System.out.println(System.currentTimeMillis());
-//	}
+	public static void main(String[] args) {
+		GeneratorUtils test = new GeneratorUtils();
+		System.out.println(test.generateId(DBTableEnum.building));
+		
+		System.out.println(System.currentTimeMillis());
+	}
 }

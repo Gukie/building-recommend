@@ -1,16 +1,20 @@
 package org.crawl.task.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-import com.alibaba.fastjson.JSON;
-
+import org.common.enums.BuildingSourceEnum;
+import org.common.model.BuildingDTO;
 import org.crawl.bean.BuildingPageInfo;
 import org.crawl.task.CrawlerTask;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import com.alibaba.fastjson.JSON;
 
 /**
  * refer: 
@@ -19,17 +23,15 @@ import org.jsoup.select.Elements;
  * @author lokia
  *
  */
-public class LianjiaCrawler extends AbstractCrawlerTask implements CrawlerTask, Runnable {
+public class LianjiaCrawler extends AbstractCrawlerTask implements CrawlerTask {
 	
 	String targetElement = ".info-panel";
 	String subUrl = "/loupan/pg";
 	
 	private String targetUrl;
 	
-	public LianjiaCrawler() {
-	}
-
 	public LianjiaCrawler(String targetUrl) {
+		init();
 		setTargetUrl(targetUrl);
 	}
 	
@@ -100,14 +102,25 @@ public class LianjiaCrawler extends AbstractCrawlerTask implements CrawlerTask, 
 	}
 
 
-	public void run() {
-		doCrawl();
-	}
+//	public void run() {
+//		doCrawl();
+//	}
 	
 
 	@Override
 	public String getTargetElement() {
 		return targetElement;
+	}
+
+	public List<BuildingDTO> call() throws Exception {
+		doCrawl();
+		return crawledDataList;
+	}
+
+	@Override
+	protected void init() {
+		sourceEnum = BuildingSourceEnum.LIAN_JIA;
+		crawledDataList = new ArrayList<BuildingDTO>();
 	}
 
 }

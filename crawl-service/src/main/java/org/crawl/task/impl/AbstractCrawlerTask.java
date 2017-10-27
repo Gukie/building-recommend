@@ -1,11 +1,12 @@
 package org.crawl.task.impl;
-
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.Callable;
 
+import org.common.enums.BuildingSourceEnum;
 import org.common.model.BuildingDTO;
 import org.crawl.bean.BuildingPageInfo;
-import org.crawl.utils.PoolUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,9 +16,13 @@ import org.jsoup.select.Elements;
  * @author gushu
  * @date 2017/10/18
  */
-public abstract class AbstractCrawlerTask {
+public abstract class AbstractCrawlerTask  implements Callable<List<BuildingDTO>>{
 
-
+	protected List<BuildingDTO> crawledDataList;
+	
+	protected BuildingSourceEnum sourceEnum;
+	
+	protected abstract void init();
 	public abstract String getTargetElement();
 
 	public abstract String getTargetUrl();
@@ -55,7 +60,9 @@ public abstract class AbstractCrawlerTask {
 		buildingDTO.setLocation(location);
 		buildingDTO.setPlate(area);
 		buildingDTO.setAvgPrice(average);
-		PoolUtils.BUILDING_POOL.add(buildingDTO);
+		buildingDTO.setSource(sourceEnum.getValue());
+		crawledDataList.add(buildingDTO);
+//		PoolUtils.BUILDING_POOL.add(buildingDTO);
 //		System.out.println(buildingName + "," + location + "," + area + "," + average);
 	}
 
