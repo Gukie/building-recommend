@@ -10,6 +10,7 @@
 		<result column="total_price" property="totalPrice"/>
 		<result column="gmt_created" property="gmtCreated"/>
 		<result column="gmt_modified" property="gmtModified"/>
+		<result column="source" property="source"/>
 	</resultMap>
 	
 	<sql id="Base_Column_List">
@@ -20,7 +21,8 @@
 		avg_price,
 		total_price,
 		gmt_created,
-		gmt_modified		
+		gmt_modified,
+		source		
 	</sql>
 	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
@@ -34,7 +36,8 @@
 			#{avgPrice},
 			#{totalPrice},
 			NOW(),
-			NOW()
+			NOW(),
+			#{source}
 		)
 	</insert>
 </mapper>

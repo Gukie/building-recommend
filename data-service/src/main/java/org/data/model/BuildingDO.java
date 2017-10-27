@@ -8,6 +8,7 @@ public class BuildingDO extends BaseDO {
 	private String location;
 	private String avgPrice;
 	private String totalPrice;
+	private String source; // zhujiayi, lianjia
 	
 	public String getName() {
 		return name;
@@ -47,5 +48,13 @@ public class BuildingDO extends BaseDO {
 
 	public void setTotalPrice(String totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
 	}
 }
