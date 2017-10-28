@@ -13,35 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient("data-service")
 public interface DataServiceClient {
 
-	@RequestMapping(value = "/store", method = RequestMethod.POST,consumes={MediaType.APPLICATION_JSON_VALUE})
-	String addBuilding(String buildingJsonStr);
-
 	@RequestMapping("/test")
 	String test(@RequestParam("test") String test);
 	
 	@RequestMapping("/hello")
 	String hello(@RequestParam("content") String content);
 
-	// @RequestMapping(value="/store",method=RequestMethod.POST,consumes =
-	// "application/json")
-	// String addBuilding( @RequestParam("buildingJsonStr") String
-	// buildingJsonStr);
-
-	// @RequestMapping(value="/store",method=RequestMethod.POST,consumes =
-	// "application/json")
-	// String addBuilding( String buildingJsonStr);
-
-	// @RequestMapping(value="/store",method=RequestMethod.POST,consumes =
-	// "application/json")
-	// String addBuilding( @HeaderParam("buildingJsonStr") String
-	// buildingJsonStr);
-
-	// @RequestMapping(value="/store",method=RequestMethod.POST,consumes =
-	// "application/json")
-	// @RequestLine("POST /store")
-	// String addBuilding( @Param("buildingJsonStr") String buildingJsonStr);
-
-	// @RequestMapping(value="/store",method=RequestMethod.POST)
-	// String addBuilding( String buildingJsonStr);
-
+	// useful api.
+	@RequestMapping(value = "/store", method = RequestMethod.POST,consumes={MediaType.APPLICATION_JSON_VALUE})
+	String addBuilding(String buildingJsonStr);
+	
+	
+	@RequestMapping(value = "/getExistingBuildingName", method = RequestMethod.GET)
+	String getExistingBuildingName();
 }

@@ -2,10 +2,12 @@ package org.data.app;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 
 import javax.annotation.Resource;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 
 import org.common.model.BuildingDTO;
 import org.common.result.BaseResult;
@@ -64,36 +66,23 @@ public class DataServiceApp {
 		return BaseResult.SUCCESS;
 	}
 
+	@RequestMapping(value = "/test")
+	public String test(String test) {
+		System.out.println(test);
+		return BaseResult.SUCCESS;
+	}
+	
+	// start from here, we use it.
 	@RequestMapping(value = "/store", method = RequestMethod.POST)
 	public String store(@RequestBody BuildingDTO buildingDTO) {
 		dataService.add(buildingDTO);
 		return BaseResult.SUCCESS;
 	}
 
-	// @RequestMapping(value="/store")
-	// public String store(String buildingJsonStr) {
-	// ObjectMapper objectMapper = new ObjectMapper();
-	// BuildingDTO buildingDTO = null;
-	// try {
-	// buildingDTO = objectMapper.readValue(buildingJsonStr, BuildingDTO.class);
-	// } catch (JsonParseException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } catch (JsonMappingException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// dataService.add(buildingDTO);
-	// return BaseResult.SUCCESS;
-	// }
-
-	@RequestMapping(value = "/test")
-	public String test(String test) {
-		System.out.println(test);
-		return BaseResult.SUCCESS;
+	@RequestMapping(value = "/getExistingBuildingName", method = RequestMethod.GET)
+	public String getExistingBuildingName() {
+//		dataService.add(buildingDTO);
+		List<String> existingBuildingNameList = dataService.getExistingBuildingName();
+		return JSONArray.toJSONString(existingBuildingNameList);
 	}
-
 }

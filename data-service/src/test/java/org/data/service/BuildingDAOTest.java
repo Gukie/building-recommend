@@ -1,5 +1,7 @@
 package org.data.service;
 
+import java.util.List;
+
 import org.data.dao.BuildingDAO;
 import org.data.model.BuildingDO;
 import org.junit.Assert;
@@ -29,5 +31,14 @@ public class BuildingDAOTest extends BaseDAOTest{
 		result.setPlate("滨江");
 		
 		return result;
+	}
+	
+	@Test
+	public void testGetExistingBuildingName(){
+		List<String> result = buildingDAO.getExistingBuildingName();
+		Assert.assertNotNull(result);
+		for(String item: result){
+			System.out.println(item);
+		}
 	}
 }

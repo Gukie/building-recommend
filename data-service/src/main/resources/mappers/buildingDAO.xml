@@ -40,4 +40,12 @@
 			#{source}
 		)
 	</insert>
+	<select id="getExistingBuildingName" resultType="String">
+		select 
+			distinct(name) 
+		from 
+			building
+		order by 
+			gmt_modified desc
+	</select>
 </mapper>

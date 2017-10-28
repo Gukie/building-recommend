@@ -1,5 +1,8 @@
 package org.data.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.common.model.BuildingDTO;
 import org.data.dao.BuildingDAO;
 import org.data.enums.DBTableEnum;
@@ -9,6 +12,7 @@ import org.data.utils.GeneratorUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author gushu
@@ -41,6 +45,14 @@ public class DataServiceImpl implements DataService{
 		BuildingDO target = new BuildingDO();
 		BeanUtils.copyProperties(buildingDTO, target);;
 		return target;
+	}
+
+	public List<String> getExistingBuildingName() {
+		List<String> exitingBuildingNameList = buildingDAO.getExistingBuildingName();
+		if(CollectionUtils.isEmpty(exitingBuildingNameList)){
+			return new ArrayList<String>();
+		}
+		return exitingBuildingNameList;
 	}
 
 }

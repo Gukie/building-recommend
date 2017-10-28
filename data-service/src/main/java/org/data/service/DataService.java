@@ -1,5 +1,7 @@
 package org.data.service;
 
+import java.util.List;
+
 import org.common.model.BuildingDTO;
 
 /**
@@ -9,5 +11,7 @@ import org.common.model.BuildingDTO;
 public interface DataService {
 
 	String add(BuildingDTO buildingDTO);
+
+	List<String> getExistingBuildingName();
 
 }
