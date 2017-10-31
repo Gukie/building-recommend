@@ -33,8 +33,10 @@ public class DataServiceImpl implements DataService{
 	public String add(BuildingDTO buildingDTO) {
 		BuildingDO existingBuilding = getBuildingFromCache(buildingDTO.getName());
 		if(existingBuilding !=null){
+			String buildingId = existingBuilding.getId();
 			update(buildingDTO,existingBuilding);
-			return existingBuilding.getId();
+			System.out.println("updated:"+buildingId);
+			return buildingId;
 		}
 		
 		BuildingDO buildingDO = convert2DO(buildingDTO);
@@ -57,11 +59,7 @@ public class DataServiceImpl implements DataService{
 	}
 
 	private BuildingDO getBuildingFromCache(String buildingName) {
-		BuildingDO  buildingDO = CacheDataUtils.buildingNameDOMap.get(buildingName);
-		if(buildingDO == null){
-			return null;
-		}
-		return buildingDO;
+		return CacheDataUtils.buildingNameDOMap.get(buildingName);
 	}
 
 	private BuildingDO convert2DO(BuildingDTO buildingDTO) {
