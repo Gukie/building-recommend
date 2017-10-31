@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @SpringBootApplication(scanBasePackages = "org.data")
-@ImportResource("classpath:mybatis/mybatis-spring.xml")
+@ImportResource(locations={"classpath:mybatis/mybatis-spring.xml","classpath:spring-conf/spring-beans.xml"})
 //@MapperScan("org.data.dao")
 @EnableEurekaClient
 // @FeignClient
