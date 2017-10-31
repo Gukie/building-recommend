@@ -10,7 +10,7 @@ public class BaseDO {
 
 	private String id;
 	private Date gmtCreated;
-	private String gmtModified;
+	private Date gmtModified;
 
 	public String getId() {
 		return id;
@@ -28,11 +28,11 @@ public class BaseDO {
 		this.gmtCreated = gmtCreated;
 	}
 
-	public String getGmtModified() {
+	public Date getGmtModified() {
 		return gmtModified;
 	}
 
-	public void setGmtModified(String gmtModified) {
+	public void setGmtModified(Date gmtModified) {
 		this.gmtModified = gmtModified;
 	}
 

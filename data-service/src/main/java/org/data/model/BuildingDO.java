@@ -2,7 +2,6 @@ package org.data.model;
 
 public class BuildingDO extends BaseDO {
 
-	
 	private String name;
 	private String plate;
 	private String location;
@@ -56,5 +55,20 @@ public class BuildingDO extends BaseDO {
 
 	public void setSource(String source) {
 		this.source = source;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder result =new StringBuilder();
+		result.append("{");
+		result.append(getId()).append(":[");
+		result.append(getName()).append("]-[");
+		result.append(getPlate()).append("]-[");
+		result.append(getLocation()).append("]-[");
+		result.append(getAvgPrice()).append("]-[");
+		result.append(getTotalPrice()).append("]-[");
+		result.append(getSource()).append("]");
+		result.append("}");
+		return result.toString();
 	}
 }

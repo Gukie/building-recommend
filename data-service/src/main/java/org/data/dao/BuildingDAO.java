@@ -11,4 +11,8 @@ public interface BuildingDAO extends BaseDAO{
 	BuildingDO getById(Integer id);
 
 	List<String> getExistingBuildingName();
+	
+	List<BuildingDO> getAll();
+
+	int update(BuildingDO buildingDO);
 }

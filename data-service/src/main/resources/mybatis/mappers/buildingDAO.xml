@@ -48,4 +48,26 @@
 		order by 
 			gmt_modified desc
 	</select>
+	<select id="getAll" resultMap="buildingDO">
+		SELECT
+			<include refid="Base_Column_List"></include>
+		FROM
+			building
+		ORDER BY
+			gmt_modified desc
+	</select>
+	<update id="update">
+		UPDATE
+			building
+		SET
+			name=#{name},
+			plate=#{plate},
+			location=#{location},
+			avg_price=#{avgPrice},
+			total_price=#{totalPrice},
+			gmt_modified=NOW(),
+			source=#{source}
+		WHERE
+			id=#{id}
+	</update>
 </mapper>

@@ -7,6 +7,7 @@ import org.data.model.BuildingDO;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 public class BuildingDAOTest extends BaseDAOTest{
 
@@ -40,5 +41,22 @@ public class BuildingDAOTest extends BaseDAOTest{
 		for(String item: result){
 			System.out.println(item);
 		}
+	}
+	
+	@Test
+	public void getGetAll(){
+		List<BuildingDO> buildingDOList = buildingDAO.getAll();
+		Assert.assertNotNull(buildingDOList);
+		printBuildingList(buildingDOList);
+	}
+
+	private void printBuildingList(List<BuildingDO> buildingDOList) {
+		if(CollectionUtils.isEmpty(buildingDOList)){
+			return;
+		}
+		for(BuildingDO item: buildingDOList){
+			System.out.println(item);
+		}
+		
 	}
 }
