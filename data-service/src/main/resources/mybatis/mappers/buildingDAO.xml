@@ -70,4 +70,13 @@
 		WHERE
 			id=#{id}
 	</update>
+	
+	<select id="getById" resultMap="buildingDO">
+		SELECT
+			<include refid="Base_Column_List"></include>
+		FROM 
+			building
+		WHERE
+			id = #{id}
+	</select>
 </mapper>

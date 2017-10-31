@@ -8,7 +8,7 @@ public interface BuildingDAO extends BaseDAO{
 
 	int insert(BuildingDO building);
 	
-	BuildingDO getById(Integer id);
+	BuildingDO getById(String id);
 
 	List<String> getExistingBuildingName();
 	

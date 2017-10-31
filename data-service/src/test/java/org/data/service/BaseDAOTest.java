@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { 
-        "classpath:datasource.xml",
-        "classpath:mybatis-spring.xml"
+        "classpath:mybatis/datasource.xml",
+        "classpath:mybatis/mybatis-spring.xml"
 })
 @Transactional
 @TransactionConfiguration(defaultRollback=false)

@@ -57,6 +57,19 @@ public class BuildingDAOTest extends BaseDAOTest{
 		for(BuildingDO item: buildingDOList){
 			System.out.println(item);
 		}
+	}
+	
+	@Test
+	public void testUpdate(){
+//		BD150885419158920
+//		BuildingDO buildingDO = new BuildingDO();
+		String buildingId = "BD150885419158920";
+		BuildingDO buildingDO = buildingDAO.getById(buildingId);
+		
+		String originalName = buildingDO.getName();
+		buildingDO.setName(originalName+"-update");
+		int updated = buildingDAO.update(buildingDO);
+		Assert.assertEquals(1, updated);
 		
 	}
 }
