@@ -4,6 +4,9 @@ import java.net.URLEncoder;
 
 import javax.annotation.Resource;
 
+import com.alibaba.fastjson.JSON;
+
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.common.model.BuildingDTO;
 import org.common.result.BaseResult;
 import org.crawl.client.DataServiceClient;
@@ -16,8 +19,6 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.alibaba.fastjson.JSON;
 
 /**
  * crawl service
@@ -78,12 +79,14 @@ public class CrawlServiceApp
     }
     
     @RequestMapping("/test")
+    @HystrixCommand(fallbackMethod = "defaultGet")
     public String test(){
-    	return dataServiceClient.test("test");
-//    	Map<String, String> params = new HashMap<String, String>();
-//    	params.put("buildingJsonStr", JSON.toJSONString(buildingDTO));
-//    	
-//    	return restTemplate.postForObject("http://data-service/store", JSON.toJSONString(buildingDTO), String.class,params);
-    	
+    	dataServiceClient.test();
+    	return BaseResult.SUCCESS;
+    }
+    
+    public String defaultGet(){
+    	System.err.println("***************Error happens");
+    	return BaseResult.SUCCESS;
     }
 }

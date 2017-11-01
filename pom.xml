@@ -115,6 +115,11 @@
 				<artifactId>hystrix-core</artifactId>
 				<version>${hystrix.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.netflix.hystrix</groupId>
+				<artifactId>hystrix-javanica</artifactId>
+				<version>${hystrix.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.mybatis.spring.boot</groupId>

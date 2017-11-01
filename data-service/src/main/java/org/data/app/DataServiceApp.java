@@ -67,8 +67,8 @@ public class DataServiceApp {
 	}
 
 	@RequestMapping(value = "/test")
-	public String test(String test) {
-		System.out.println(test);
+	public String test() {
+		System.out.println("heart beating");
 		return BaseResult.SUCCESS;
 	}
 	
