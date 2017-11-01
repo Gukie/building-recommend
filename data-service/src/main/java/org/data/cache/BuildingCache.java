@@ -3,7 +3,7 @@ package org.data.cache;
 import java.util.List;
 
 import org.data.dao.BuildingDAO;
-import org.data.model.BuildingDO;
+import org.data.model.db.BuildingDO;
 import org.data.utils.CacheDataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;

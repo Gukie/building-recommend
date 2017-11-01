@@ -2,7 +2,10 @@ package org.data.service;
 
 import java.util.List;
 
+import org.common.enums.PlateTypeEnum;
+import org.common.model.BuildingAvgPriceDTO;
 import org.common.model.BuildingDTO;
+import org.common.query.BuildingQuery;
 
 /**
  * @author gushu
@@ -14,4 +17,7 @@ public interface DataService {
 
 	List<String> getExistingBuildingName();
 
+	List<BuildingAvgPriceDTO> getAvgPriceByPlateType(PlateTypeEnum plateType);
+	
+	List<BuildingDTO> getBuildingByCondition(BuildingQuery query); 
 }

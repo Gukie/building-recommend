@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.data.dao.BuildingDAO" >
-	<resultMap type="org.data.model.BuildingDO" id="buildingDO">
+	<resultMap type="org.data.model.db.BuildingDO" id="buildingDO">
 		<result column="id" property="id"/>
 		<result column="name" property="name"/>
 		<result column="plate" property="plate"/>
 		<result column="location" property="location"/>
+		<result column="avg_price_txt" property="avgPriceTxt"/>
 		<result column="avg_price" property="avgPrice"/>
 		<result column="total_price" property="totalPrice"/>
 		<result column="gmt_created" property="gmtCreated"/>
 		<result column="gmt_modified" property="gmtModified"/>
 		<result column="source" property="source"/>
+	</resultMap>
+	<resultMap type="org.data.model.biz.BuildingAvgPriceDO" id="buildingAvgPriceDO">
+		<result column="location" property="location"/>
+		<result column="avg_price_per_area" property="avgPricePerArea"/>
 	</resultMap>
 	
 	<sql id="Base_Column_List">
@@ -19,6 +24,7 @@
 		plate,
 		location,
 		avg_price,
+		avg_price_txt,
 		total_price,
 		gmt_created,
 		gmt_modified,
@@ -34,6 +40,7 @@
 			#{plate},
 			#{location},
 			#{avgPrice},
+			#{avgPriceTxt},
 			#{totalPrice},
 			NOW(),
 			NOW(),
@@ -64,6 +71,7 @@
 			plate=#{plate},
 			location=#{location},
 			avg_price=#{avgPrice},
+			avg_price_txt=#{avgPriceTxt},
 			total_price=#{totalPrice},
 			gmt_modified=NOW(),
 			source=#{source}
@@ -78,5 +86,40 @@
 			building
 		WHERE
 			id = #{id}
+	</select>
+	<select id="getAvgPrice" resultType="Double">
+		SELECT 
+			AVG(avg_price) 
+		FROM 
+			building 
+		WHERE 
+			avg_price !=0
+	</select>
+	<select id="getAvgPricePerArea" resultMap="buildingAvgPriceDO">
+		SELECT 
+			location, AVG(avg_price) as avg_price_per_area
+		FROM 
+			building 
+		WHERE 
+			avg_price !=0 
+		GROUP BY
+			location
+	</select>
+	
+	<select id="getBuildingByCondition" resultMap="buildingDO">
+		SELECT 
+			<include refid="Base_Column_List"></include>
+		FROM
+			building
+		WHERE
+			1=1
+				<if test="avgPriceRangeStart !=null">
+					AND avg_price <![CDATA[>=]]> #{avgPriceRangeStart}
+				</if>
+				<if test="avgPriceRangeEnd !=null">
+					AND avg_price <![CDATA[<=]]> #{avgPriceRangeEnd}
+				</if>
+		ORDER BY
+			gmt_modified desc
 	</select>
 </mapper>

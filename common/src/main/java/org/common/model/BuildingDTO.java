@@ -14,7 +14,8 @@ public class BuildingDTO implements Serializable{
 	private String id;
 	private String name;
 	private String location;
-	private String avgPrice;
+	private String avgPriceTxt;
+	private Integer avgPrice;
 	private String plate;
 	private String totalPrice;
 	private Date gmtCreated;
@@ -38,12 +39,6 @@ public class BuildingDTO implements Serializable{
 	}
 	public void setLocation(String location) {
 		this.location = location;
-	}
-	public String getAvgPrice() {
-		return avgPrice;
-	}
-	public void setAvgPrice(String avgPrice) {
-		this.avgPrice = avgPrice;
 	}
 	public String getPlate() {
 		return plate;
@@ -74,5 +69,17 @@ public class BuildingDTO implements Serializable{
 	}
 	public void setSource(String source) {
 		this.source = source;
+	}
+	public String getAvgPriceTxt() {
+		return avgPriceTxt;
+	}
+	public void setAvgPriceTxt(String avgPriceTxt) {
+		this.avgPriceTxt = avgPriceTxt;
+	}
+	public Integer getAvgPrice() {
+		return avgPrice;
+	}
+	public void setAvgPrice(Integer avgPrice) {
+		this.avgPrice = avgPrice;
 	}
 }

@@ -3,7 +3,7 @@ package org.data.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.data.model.BuildingDO;
+import org.data.model.db.BuildingDO;
 
 /**
  * @author gushu

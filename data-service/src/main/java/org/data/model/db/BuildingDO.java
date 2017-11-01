@@ -1,11 +1,12 @@
-package org.data.model;
+package org.data.model.db;
 
 public class BuildingDO extends BaseDO {
 
 	private String name;
 	private String plate;
 	private String location;
-	private String avgPrice;
+	private String avgPriceTxt;
+	private Integer avgPrice;
 	private String totalPrice;
 	private String source; // zhujiayi, lianjia
 	
@@ -25,11 +26,11 @@ public class BuildingDO extends BaseDO {
 		this.location = location;
 	}
 
-	public String getAvgPrice() {
+	public Integer getAvgPrice() {
 		return avgPrice;
 	}
 
-	public void setAvgPrice(String avgPrice) {
+	public void setAvgPrice(Integer avgPrice) {
 		this.avgPrice = avgPrice;
 	}
 
@@ -57,6 +58,14 @@ public class BuildingDO extends BaseDO {
 		this.source = source;
 	}
 	
+	public String getAvgPriceTxt() {
+		return avgPriceTxt;
+	}
+
+	public void setAvgPriceTxt(String avgPriceTxt) {
+		this.avgPriceTxt = avgPriceTxt;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder result =new StringBuilder();
@@ -65,6 +74,7 @@ public class BuildingDO extends BaseDO {
 		result.append(getName()).append("]-[");
 		result.append(getPlate()).append("]-[");
 		result.append(getLocation()).append("]-[");
+		result.append(getAvgPriceTxt()).append("]-[");
 		result.append(getAvgPrice()).append("]-[");
 		result.append(getTotalPrice()).append("]-[");
 		result.append(getSource()).append("]");

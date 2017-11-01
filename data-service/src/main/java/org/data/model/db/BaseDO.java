@@ -1,4 +1,4 @@
-package org.data.model;
+package org.data.model.db;
 
 import java.util.Date;
 

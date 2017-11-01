@@ -9,7 +9,10 @@ import javax.annotation.Resource;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 
+import org.common.enums.PlateTypeEnum;
+import org.common.model.BuildingAvgPriceDTO;
 import org.common.model.BuildingDTO;
+import org.common.query.BuildingQuery;
 import org.common.result.BaseResult;
 import org.data.service.DataService;
 import org.springframework.boot.SpringApplication;
@@ -19,14 +22,15 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
  */
 @SpringBootApplication(scanBasePackages = "org.data")
-@ImportResource(locations={"classpath:mybatis/mybatis-spring.xml","classpath:spring-conf/spring-beans.xml"})
-//@MapperScan("org.data.dao")
+@ImportResource(locations = { "classpath:mybatis/mybatis-spring.xml", "classpath:spring-conf/spring-beans.xml" })
+// @MapperScan("org.data.dao")
 @EnableEurekaClient
 // @FeignClient
 @RestController
@@ -48,6 +52,7 @@ public class DataServiceApp {
 
 	/**
 	 * not work
+	 * 
 	 * @param content
 	 * @return
 	 */
@@ -71,7 +76,7 @@ public class DataServiceApp {
 		System.out.println("heart beating");
 		return BaseResult.SUCCESS;
 	}
-	
+
 	// start from here, we use it.
 	@RequestMapping(value = "/store", method = RequestMethod.POST)
 	public String store(@RequestBody BuildingDTO buildingDTO) {
@@ -81,8 +86,23 @@ public class DataServiceApp {
 
 	@RequestMapping(value = "/getExistingBuildingName", method = RequestMethod.GET)
 	public String getExistingBuildingName() {
-//		dataService.add(buildingDTO);
+		// dataService.add(buildingDTO);
 		List<String> existingBuildingNameList = dataService.getExistingBuildingName();
 		return JSONArray.toJSONString(existingBuildingNameList);
+	}
+
+	@RequestMapping(value = "/getAvgPriceByPlateType")
+	public @ResponseBody List<BuildingAvgPriceDTO> getAvgPriceByPlateType(String plateType) {
+		PlateTypeEnum plateTypeEnum = PlateTypeEnum.parseTxt(plateType);
+		if (plateTypeEnum == null) {
+			return null;
+		}
+		return dataService.getAvgPriceByPlateType(plateTypeEnum);
+	}
+
+	@RequestMapping(value = "/getBuildingByCondition")
+	public @ResponseBody List<BuildingDTO> getBuildingByCondition(@RequestBody String buildingQueryTxt) {
+		BuildingQuery builidingQuery = JSON.parseObject(buildingQueryTxt, BuildingQuery.class);
+		return dataService.getBuildingByCondition(builidingQuery);
 	}
 }
