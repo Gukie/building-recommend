@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.lang.StringUtils;
 import org.common.enums.BuildingSourceEnum;
 import org.common.model.BuildingDTO;
 import org.crawl.bean.BuildingPageInfo;
@@ -61,22 +62,27 @@ public abstract class AbstractCrawlerTask  implements Callable<List<BuildingDTO>
 		buildingDTO.setLocation(location);
 		buildingDTO.setPlate(area);
 		buildingDTO.setAvgPriceTxt(averageTxt);
-		buildingDTO.setAvgPrice(RegexUtils.getDigitNum(averageTxt));
+		if(RegexUtils.isTotalPriceTxt(averageTxt)){
+			buildingDTO.setTotalPrice(RegexUtils.getTotalPriceDigitStr(averageTxt));
+		}else{
+			buildingDTO.setAvgPrice(RegexUtils.getDigitNum(averageTxt));
+		}
 		buildingDTO.setSource(sourceEnum.getValue());
 		crawledDataList.add(buildingDTO);
 //		PoolUtils.BUILDING_POOL.add(buildingDTO);
 //		System.out.println(buildingName + "," + location + "," + area + "," + average);
 	}
 
+	
 	private String parseAveragePriceStr(Element element) {
 		Elements elements = parseAveragePrice(element);
 		String tmpResult = getElementsText(elements);
 		if(tmpResult.contains("：")) {
-			return tmpResult.split("：")[1];
+			return trimTxt(tmpResult.split("：")[1]);
 		}
 		
 		if(tmpResult.contains(":")) {
-			return tmpResult.split(":")[1];
+			return trimTxt(tmpResult.split(":")[1]);
 		}
 		return tmpResult;
 	}
@@ -108,9 +114,16 @@ public abstract class AbstractCrawlerTask  implements Callable<List<BuildingDTO>
 		Iterator<Element> iterator = elements.iterator();
 		if (iterator.hasNext()) {
 			Element header = iterator.next();
-			return header.text();
+			return trimTxt(header.text());
 		}
 		return "";
+	}
+	
+	private String trimTxt(String txt){
+		if(StringUtils.isEmpty(txt)){
+			return txt;
+		}
+		return txt.trim();
 	}
 
 	public int crawlTotalPage() {
