@@ -24,6 +24,7 @@
 		<fast.json.version>1.2.38</fast.json.version>
 		<http.client.version>4.5.2</http.client.version>
 		<jsoup.version>1.10.3</jsoup.version>
+		<javax.mail.version>1.4</javax.mail.version>
 	</properties>
 
 	<profiles>
@@ -153,6 +154,11 @@
 				<groupId>org.jsoup</groupId>
 				<artifactId>jsoup</artifactId>
 				<version>${jsoup.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.mail</groupId>
+				<artifactId>mail</artifactId>
+				<version>${javax.mail.version}</version>
 			</dependency>
 
 		</dependencies>

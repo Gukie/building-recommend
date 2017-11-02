@@ -1,58 +1,53 @@
 package org.recommend.service.impl;
 
-import java.util.List;
+import java.util.Date;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
-import org.common.enums.PlateTypeEnum;
-import org.common.model.BuildingAvgPriceDTO;
-import org.common.model.BuildingDTO;
-import org.common.query.BuildingQuery;
-import org.recommend.client.DataServiceClient;
 import org.recommend.service.EmailService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.recommend.utils.EmailBasicInfoUtils;
+import org.recommend.utils.RecommendPropKeys;
 import org.springframework.stereotype.Service;
 
 /**
  * @author gushu
  * @date 2017/11/01
  */
-@Service("emailService")
+ @Service("emailService")
 public class EmailServiceImpl implements EmailService {
 
-	@Autowired
-	private DataServiceClient dataClient;
-	
-	public void recommend(String email) {
-		List<BuildingAvgPriceDTO> avgPriceDTOList4All = dataClient.getAvgPriceByPlateType(PlateTypeEnum.ALL.getValue());
-		List<BuildingAvgPriceDTO> avgPriceDTOList4Per = dataClient.getAvgPriceByPlateType(PlateTypeEnum.PER.getValue());
-		
-		BuildingQuery buildingQuery = new BuildingQuery();
-		List<BuildingDTO>  buildignDTOList = dataClient.getBuildingByCondition(JSON.toJSONString(buildingQuery));
-	
-		String emailContent = generateEmailContent(avgPriceDTOList4All,avgPriceDTOList4Per,buildignDTOList);
-		send2Email(emailContent,email);
+	public boolean send(String to, String msgBodyTxt) {
+		String subject = EmailBasicInfoUtils.getBasicProperties().getProperty(RecommendPropKeys.MAIL_SUBJECT);
+		Session session = EmailBasicInfoUtils.getSession();
+		return sendEmail(session, to, subject, msgBodyTxt);
 	}
 
-	private String generateEmailContent(List<BuildingAvgPriceDTO> avgPriceDTOList4All,
-			List<BuildingAvgPriceDTO> avgPriceDTOList4Per, List<BuildingDTO> buildignDTOList) {
-		StringBuilder result = new StringBuilder();
-		String avgPrice4AllJsonTxt = JSONArray.toJSONString(avgPriceDTOList4All);
-		String avgPrice4PerJsonTxt = JSONArray.toJSONString(avgPriceDTOList4Per);
-		String matchedConditionJsonTxt = JSONArray.toJSONString(buildignDTOList);
-		result.append("total avg:[").append(avgPrice4AllJsonTxt).append("]");
-		result.append("per avg:[").append(avgPrice4PerJsonTxt).append("]");
-		result.append("matched building:[").append(matchedConditionJsonTxt).append("]");
-		return result.toString();
-	}
+	public boolean sendEmail(Session session, String toEmail, String subject, String body) {
+		try {
+			MimeMessage msg = new MimeMessage(session);
+			// set message headers
+			msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
+			msg.addHeader("format", "flowed");
+			msg.addHeader("Content-Transfer-Encoding", "8bit");
 
-	private void send2Email(String emailContent, String email) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
+			msg.setFrom(new InternetAddress("no_reply@journaldev.com", "NoReply-JD"));
+			msg.setReplyTo(InternetAddress.parse("no_reply@journaldev.com", false));
+			msg.setSubject(subject, "UTF-8");
+			msg.setText(body, "UTF-8");
 
-	
+			msg.setSentDate(new Date());
+			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+			System.out.println("Message is ready");
+			Transport.send(msg);
+			System.out.println("EMail Sent Successfully!!");
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

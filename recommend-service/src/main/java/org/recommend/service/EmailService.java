@@ -6,6 +6,5 @@ package org.recommend.service;
  */
 public interface EmailService {
 
-	void recommend(String email);
-
+	boolean send(String targetEmail, String msgBodyTxt);
 }
