@@ -16,7 +16,7 @@ public class EmailBasicInfoUtils {
 
 //	private final static String EMAIL_CONFIG_FILE_NAME = "classpath*:email-config.properties";
 
-	private final static String EMAIL_CONFIG_FILE_NAME = "email-config.properties";
+	private final static String EMAIL_CONFIG_FILE_NAME = "email-conf/email-config.properties";
 
 	private static Properties props;
 
@@ -38,7 +38,7 @@ public class EmailBasicInfoUtils {
 			System.err.println("cannot load email properties");
 			return;
 		}
-		props = new Properties();
+		props = System.getProperties();
 		try {
 			props.load(inputStream);
 		} catch (IOException e) {
@@ -48,8 +48,8 @@ public class EmailBasicInfoUtils {
 
 	private static Authenticator generateAuth() {
 		Properties properties = getBasicProperties();
-		final String from = properties.getProperty(RecommendPropKeys.MAIL_FROM);
-		final String password = properties.getProperty(RecommendPropKeys.MAIL_FROM_PASSWORD);
+		final String from = properties.getProperty(RecommendPropKeys.MAIL_USER);
+		final String password = properties.getProperty(RecommendPropKeys.MAIL_USER_PASSWORD);
 		return new Authenticator() {
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
@@ -59,8 +59,9 @@ public class EmailBasicInfoUtils {
 	}
 	
 	public static Session getSession(){
-		Properties props = EmailBasicInfoUtils.getBasicProperties();
-		Authenticator auth = EmailBasicInfoUtils.generateAuth();
+		Properties props = getBasicProperties();
+		Authenticator auth = generateAuth();
 		return Session.getDefaultInstance(props, auth);
+//		return Session.getInstance(props, auth);
 	}
 }
