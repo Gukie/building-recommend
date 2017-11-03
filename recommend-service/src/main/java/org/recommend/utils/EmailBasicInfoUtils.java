@@ -14,8 +14,10 @@ import javax.mail.Session;
  */
 public class EmailBasicInfoUtils {
 
+//	private final static String EMAIL_CONFIG_FILE_NAME = "classpath*:email-config.properties";
+
 	private final static String EMAIL_CONFIG_FILE_NAME = "email-config.properties";
-	
+
 	private static Properties props;
 
 	public static Properties getBasicProperties() {
@@ -31,7 +33,7 @@ public class EmailBasicInfoUtils {
 	}
 
 	private static void initProps() {
-		InputStream inputStream = EmailBasicInfoUtils.class.getResourceAsStream(EMAIL_CONFIG_FILE_NAME);
+		InputStream inputStream = EmailBasicInfoUtils.class.getClassLoader().getResourceAsStream(EMAIL_CONFIG_FILE_NAME);
 		if (inputStream == null) {
 			System.err.println("cannot load email properties");
 			return;

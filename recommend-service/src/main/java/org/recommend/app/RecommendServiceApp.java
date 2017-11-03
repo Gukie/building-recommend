@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * recommend service
  *
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages={"org.recommend"})
 @EnableEurekaClient
 @EnableFeignClients(basePackages="org.recommend.client")
 @ImportResource(locations = { "classpath:spring-conf/spring-beans.xml" })
