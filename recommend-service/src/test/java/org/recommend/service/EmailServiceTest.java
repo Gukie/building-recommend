@@ -2,21 +2,14 @@ package org.recommend.service;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.recommend.app.RecommendServiceApp;
+import org.recommend.ServiceBaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * @author gushu
  * @date 2017/11/02
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest (classes=RecommendServiceApp.class)
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@Transactional
-public class EmailServiceTest {
+public class EmailServiceTest extends ServiceBaseTest{
 
 	@Autowired
 	private EmailService emailService;

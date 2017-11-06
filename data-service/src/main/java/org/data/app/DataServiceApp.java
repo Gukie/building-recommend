@@ -92,7 +92,7 @@ public class DataServiceApp {
 	}
 
 	@RequestMapping(value = "/getAvgPriceByPlateType")
-	public @ResponseBody List<BuildingAvgPriceDTO> getAvgPriceByPlateType(String plateType) {
+	public @ResponseBody List<BuildingAvgPriceDTO> getAvgPriceByPlateType(@RequestBody String plateType) {
 		PlateTypeEnum plateTypeEnum = PlateTypeEnum.parseTxt(plateType);
 		if (plateTypeEnum == null) {
 			return null;

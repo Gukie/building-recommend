@@ -32,19 +32,23 @@ public class EmailServiceImpl implements EmailService {
 //		Session session = EmailBasicInfoUtils.getSession();
 //		session.setDebug(true);
 //		return sendEmail(session,from, to, subject, msgBodyTxt);
+		System.err.println("msgBody:"+msgBodyTxt);
 		
-		String host = EmailBasicInfoUtils.getBasicProperties().getProperty(RecommendPropKeys.MAIL_SMTP_HOST);
-		Integer port = Integer.valueOf(EmailBasicInfoUtils.getBasicProperties().getProperty(RecommendPropKeys.MAIL_SMTP_PORT));
-		String userEmail = EmailBasicInfoUtils.getBasicProperties().getProperty(RecommendPropKeys.MAIL_USER);
+		
 		String oauthToken = EmailBasicInfoUtils.getBasicProperties().getProperty(RecommendPropKeys.MAIL_OAUTH_TOKEN);
 		Boolean debug = Boolean.valueOf(EmailBasicInfoUtils.getBasicProperties().getProperty(RecommendPropKeys.MAIL_DEBUG));
 		
 		Session session = oAuth2Authenticator.getSmtpSession(oauthToken, debug);
-		return sendByGmail(session,host, port, userEmail,to, oauthToken, debug);
+		return sendByGmail(session,to,msgBodyTxt, oauthToken, debug);
 	}
 
-	public boolean sendByGmail(Session session,String host, int port, String userEmail,String toEmail, String oauthToken,
+	public boolean sendByGmail(Session session,String toEmail,String msgBodyTxt, String oauthToken,
 			boolean debug) {
+		
+		String host = EmailBasicInfoUtils.getBasicProperties().getProperty(RecommendPropKeys.MAIL_SMTP_HOST);
+		Integer port = Integer.valueOf(EmailBasicInfoUtils.getBasicProperties().getProperty(RecommendPropKeys.MAIL_SMTP_PORT));
+		String userEmail = EmailBasicInfoUtils.getBasicProperties().getProperty(RecommendPropKeys.MAIL_USER);
+		String subject = EmailBasicInfoUtils.getBasicProperties().getProperty(RecommendPropKeys.MAIL_SUBJECT);
 		try {
 
 	        Message message = new MimeMessage(session);
@@ -54,12 +58,13 @@ public class EmailServiceImpl implements EmailService {
 	        message.setFrom(fromAddress);
 	        message.setRecipient(Message.RecipientType.TO, toAddress);
 
-	        message.setSubject("Hello Gmail");
-	        message.setText("test from lokia");
+	        message.setSubject(subject);
+	        message.setText(msgBodyTxt);
 	        SMTPTransport transport = oAuth2Authenticator.getSmtpTransport(session,host, port, userEmail);
 	        System.err.println("get smtp transport successfully ");
 	        transport.sendMessage(message,message.getAllRecipients());
 	        transport.close();
+	        System.err.println("email sent successfully");
 	        return true;
 	    }catch(Exception ex){
 	    	ex.printStackTrace();

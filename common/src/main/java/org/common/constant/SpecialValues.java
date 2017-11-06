@@ -21,4 +21,6 @@ public class SpecialValues {
 	 */
 	public static final String RANGE_PRICE_KEY_WORD = "-";
 	public static final String EMPTY_STR = "";
+
+	public static final String DEFAULT_TO_EMAIL = "zjut_gu@163.com";
 }

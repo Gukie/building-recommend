@@ -2,6 +2,8 @@ package org.recommend.app;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
+import org.common.constant.SpecialValues;
 import org.common.result.BaseResult;
 import org.recommend.service.RecommendService;
 import org.springframework.boot.SpringApplication;
@@ -33,6 +35,9 @@ public class RecommendServiceApp
     
     @RequestMapping("/sendEmail")
     public String sendEmail(String email){
+    	if(StringUtils.isEmpty(email)){
+    		email = SpecialValues.DEFAULT_TO_EMAIL;
+    	}
     	recommendService.recommend2Email(email);
     	return BaseResult.SUCCESS;
     }
