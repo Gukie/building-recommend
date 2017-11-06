@@ -24,6 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.common.model.BuildingAvgPriceDTO;
 import org.common.model.BuildingDTO;
+import org.common.utils.FileUtils;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -35,7 +36,7 @@ public class ExcelGenerator {
 	private final static int ROW_COLUMN_NUM_AVG_PRICE = 2;
 	private final static int ROW_COLUMN_NUM_CONDITION_MATCHED = 7;
 	
-	private final static String EXCEL_FILE_PATH = "/src/main/resources/excel/attachment.xlsx";
+	private final static String EXCEL_TMP_FOLDER = "./src/main/resources/excel";
 	private final static String EXCEL_SHEET_NAME = "building weekly report";
 	private static int rowIndex = 0; // the row index which is writing
 	private static Map<BLOCK, List<String>> blockHeaderColumnMap = new HashMap<ExcelGenerator.BLOCK, List<String>>();
@@ -89,8 +90,6 @@ public class ExcelGenerator {
 			index++;
 		}
 	}
-
-
 	public static File generateExcelFile(List<BuildingAvgPriceDTO> buildingAvgPriceList,
 			List<BuildingDTO> buildingList) {
 		Workbook workbook = null;
@@ -109,8 +108,8 @@ public class ExcelGenerator {
 			createBlockHeaderRow(workbook, sheet, BLOCK.condition_matched);
 			createBlockDataRow(workbook, sheet, buildingList);
 
-			String tmpFilePath = generateTmpFilePath();
-			File file = new File(tmpFilePath);
+			File file = FileUtils.generateTmpExcelFile(EXCEL_TMP_FOLDER);
+			System.err.println(file.getCanonicalPath());
 			workbook.write(new FileOutputStream(file));
 			return file;
 		} catch (IOException e) {
@@ -127,14 +126,6 @@ public class ExcelGenerator {
 		}
 		return null;
 	}
-
-	private static String generateTmpFilePath() {
-		File rootFile = new File("");
-		String excelFilePath = rootFile.getAbsolutePath()+EXCEL_FILE_PATH;
-		System.err.println("path:"+excelFilePath);
-		return excelFilePath;
-	}
-
 
 	private static <T> void createBlockDataRow(Workbook workbook, Sheet sheet, List<T> itemList) throws IllegalArgumentException, IllegalAccessException {
 		rowIndex++;
