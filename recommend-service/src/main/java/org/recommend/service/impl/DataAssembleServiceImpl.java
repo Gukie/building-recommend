@@ -1,5 +1,7 @@
 package org.recommend.service.impl;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
@@ -10,9 +12,11 @@ import org.common.model.BuildingAvgPriceDTO;
 import org.common.model.BuildingDTO;
 import org.common.query.BuildingQuery;
 import org.recommend.client.DataServiceClient;
+import org.recommend.excel.ExcelGenerator;
 import org.recommend.service.DataAssembleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author gushu
@@ -43,6 +47,32 @@ public class DataAssembleServiceImpl implements DataAssembleService {
 		result.append("per avg:[").append(avgPrice4PerJsonTxt).append("]");
 		result.append("matched building:[").append(matchedConditionJsonTxt).append("]");
 		return result.toString();
+	}
+
+	public File assembleExcel() {
+		
+		List<BuildingAvgPriceDTO> avgPriceDTOList = getAvgPriceDTOList();
+		List<BuildingDTO> conditionBuildingList = getConditionBuildingList();
+		return ExcelGenerator.generateExcelFile(avgPriceDTOList,conditionBuildingList);
+	}
+
+	private List<BuildingDTO> getConditionBuildingList() {
+		BuildingQuery buildingQuery = new BuildingQuery();
+		return dataClient.getBuildingByCondition(JSON.toJSONString(buildingQuery));
+	}
+
+	private List<BuildingAvgPriceDTO> getAvgPriceDTOList() {
+		List<BuildingAvgPriceDTO> result = new ArrayList<BuildingAvgPriceDTO>();
+		List<BuildingAvgPriceDTO> avgPriceDTOList4All = dataClient.getAvgPriceByPlateType(PlateTypeEnum.ALL.getValue());
+		List<BuildingAvgPriceDTO> avgPriceDTOList4Per = dataClient.getAvgPriceByPlateType(PlateTypeEnum.PER.getValue());
+		
+		if(!CollectionUtils.isEmpty(avgPriceDTOList4All)){
+			result.addAll(avgPriceDTOList4All);
+		}
+		if(!CollectionUtils.isEmpty(avgPriceDTOList4Per)){
+			result.addAll(avgPriceDTOList4Per);
+		}
+		return result;
 	}
 
 }

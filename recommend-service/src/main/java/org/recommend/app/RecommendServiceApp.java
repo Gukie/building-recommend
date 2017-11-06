@@ -33,6 +33,11 @@ public class RecommendServiceApp
     @Resource(name="recommendService")
     private RecommendService recommendService;
     
+    @RequestMapping("/test")
+    public String test(){
+    	return "test";
+    }
+    
     @RequestMapping("/sendEmail")
     public String sendEmail(String email){
     	if(StringUtils.isEmpty(email)){
