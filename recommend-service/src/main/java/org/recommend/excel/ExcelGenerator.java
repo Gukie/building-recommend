@@ -15,6 +15,7 @@ import java.util.Set;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -33,9 +34,6 @@ import org.springframework.util.CollectionUtils;
  */
 public class ExcelGenerator {
 
-	private final static int ROW_COLUMN_NUM_AVG_PRICE = 2;
-	private final static int ROW_COLUMN_NUM_CONDITION_MATCHED = 7;
-	
 	private final static String EXCEL_TMP_FOLDER = "./src/main/resources/excel";
 	private final static String EXCEL_SHEET_NAME = "building weekly report";
 	private static int rowIndex = 0; // the row index which is writing
@@ -43,7 +41,8 @@ public class ExcelGenerator {
 	private static Map<Integer, Field> columnIndexFieldClass4AvgPrice = new HashMap<Integer, Field>();
 	private static Map<Integer, Field> columnIndexFieldClass4Condition = new HashMap<Integer, Field>();
 	private static Set<String> excludedBuildingFields = new HashSet<String>();
-	static{
+	static {
+		excludedBuildingFields.add("serialVersionUID");
 		excludedBuildingFields.add("id");
 		excludedBuildingFields.add("avgPrice");
 		excludedBuildingFields.add("gmtCreated");
@@ -51,45 +50,44 @@ public class ExcelGenerator {
 		initBlockHeaderColumnMap();
 		initColumnIndexFieldClass4AvgPrice();
 		initColumnIndexFieldClass4Condition();
-		
+
 	}
 
 	private static void initBlockHeaderColumnMap() {
 		List<String> avgPriceHeaderColumns = new ArrayList<String>();
-		for(HEADER_COLUMNS_AVG_PRICE item: HEADER_COLUMNS_AVG_PRICE.values()){
+		for (HEADER_COLUMNS_AVG_PRICE item : HEADER_COLUMNS_AVG_PRICE.values()) {
 			avgPriceHeaderColumns.add(item.getValue());
 		}
 		List<String> conditionHeaderColums = new ArrayList<String>();
-		for(HEADER_COLUMNS_CONDITION_MATCHED item: HEADER_COLUMNS_CONDITION_MATCHED.values()){
+		for (HEADER_COLUMNS_CONDITION_MATCHED item : HEADER_COLUMNS_CONDITION_MATCHED.values()) {
 			conditionHeaderColums.add(item.getValue());
 		}
 		blockHeaderColumnMap.put(BLOCK.avg_price, avgPriceHeaderColumns);
 		blockHeaderColumnMap.put(BLOCK.condition_matched, conditionHeaderColums);
 	}
 
-
 	private static void initColumnIndexFieldClass4Condition() {
-		Field[]  fields = BuildingDTO.class.getDeclaredFields();
+		Field[] fields = BuildingDTO.class.getDeclaredFields();
 		int index = 0;
-		for(Field field: fields){
-			if(excludedBuildingFields.contains(field.getName())){
+		for (Field field : fields) {
+			if (excludedBuildingFields.contains(field.getName())) {
 				continue;
 			}
 			columnIndexFieldClass4Condition.put(index, field);
 			index++;
 		}
-		
+
 	}
 
-
 	private static void initColumnIndexFieldClass4AvgPrice() {
-		Field[]  fields = BuildingAvgPriceDTO.class.getDeclaredFields();
+		Field[] fields = BuildingAvgPriceDTO.class.getDeclaredFields();
 		int index = 0;
-		for(Field field: fields){
+		for (Field field : fields) {
 			columnIndexFieldClass4AvgPrice.put(index, field);
 			index++;
 		}
 	}
+
 	public static File generateExcelFile(List<BuildingAvgPriceDTO> buildingAvgPriceList,
 			List<BuildingDTO> buildingList) {
 		Workbook workbook = null;
@@ -97,13 +95,13 @@ public class ExcelGenerator {
 		try {
 			workbook = new XSSFWorkbook();
 			Sheet sheet = workbook.createSheet(EXCEL_SHEET_NAME);
-			
+
 			// avg price
 			createBlockTitleRow(workbook, sheet, BLOCK.avg_price);
 			createBlockHeaderRow(workbook, sheet, BLOCK.avg_price);
 			createBlockDataRow(workbook, sheet, buildingAvgPriceList);
 
-			// condition 
+			// condition
 			createBlockTitleRow(workbook, sheet, BLOCK.condition_matched);
 			createBlockHeaderRow(workbook, sheet, BLOCK.condition_matched);
 			createBlockDataRow(workbook, sheet, buildingList);
@@ -111,15 +109,16 @@ public class ExcelGenerator {
 			File file = FileUtils.generateTmpExcelFile(EXCEL_TMP_FOLDER);
 			System.err.println(file.getCanonicalPath());
 			workbook.write(new FileOutputStream(file));
+			
+			for(int i =0;i < 7;i++){
+				sheet.autoSizeColumn(i);
+			}
 			return file;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			closeWorkbook(workbook);
@@ -127,37 +126,36 @@ public class ExcelGenerator {
 		return null;
 	}
 
-	private static <T> void createBlockDataRow(Workbook workbook, Sheet sheet, List<T> itemList) throws IllegalArgumentException, IllegalAccessException {
+	private static <T> void createBlockDataRow(Workbook workbook, Sheet sheet, List<T> itemList)
+			throws IllegalArgumentException, IllegalAccessException {
 		rowIndex++;
 		CellStyle style = workbook.createCellStyle();
-		style.setWrapText(true);
-		 
-		if(CollectionUtils.isEmpty(itemList)){
-			Row row = sheet.createRow(2);
+		style.setWrapText(false);
+		style.setShrinkToFit(true);
+
+		if (CollectionUtils.isEmpty(itemList)) {
+			Row row = sheet.createRow(rowIndex);
 			Cell cell = row.createCell(0);
 			cell.setCellValue("no data");
 			cell.setCellStyle(style);
 			return;
 		}
-		
-		T firstItem = itemList.get(0);
-		int columnNum = getColumnNum(firstItem);
-		for(T item: itemList){
-			rowIndex++;
-			Row row = sheet.createRow(columnNum);
-			if(item instanceof BuildingAvgPriceDTO){
+
+		for (T item : itemList) {
+			Row row = sheet.createRow(rowIndex);
+			if (item instanceof BuildingAvgPriceDTO) {
 				BuildingAvgPriceDTO avgPriceItem = (BuildingAvgPriceDTO) item;
-				for(Entry<Integer, Field> entryItem: columnIndexFieldClass4AvgPrice.entrySet()){
+				for (Entry<Integer, Field> entryItem : columnIndexFieldClass4AvgPrice.entrySet()) {
 					int cellIndex = entryItem.getKey();
 					Field field = entryItem.getValue();
 					field.setAccessible(true);
 					Object value = field.get(avgPriceItem);
 					createRowCell(style, row, cellIndex, value);
 				}
-				
-			}else if(item instanceof BuildingDTO){
+
+			} else if (item instanceof BuildingDTO) {
 				BuildingDTO buildingItem = (BuildingDTO) item;
-				for(Entry<Integer, Field> enrtyItem: columnIndexFieldClass4Condition.entrySet()){
+				for (Entry<Integer, Field> enrtyItem : columnIndexFieldClass4Condition.entrySet()) {
 					int cellNum = enrtyItem.getKey();
 					Field field = enrtyItem.getValue();
 					field.setAccessible(true);
@@ -165,23 +163,13 @@ public class ExcelGenerator {
 					createRowCell(style, row, cellNum, value);
 				}
 			}
+			rowIndex++;
 		}
 	}
-
-	private static <T> int getColumnNum(T item) {
-		if(item instanceof BuildingAvgPriceDTO){
-			return ROW_COLUMN_NUM_AVG_PRICE;
-		}
-		if(item instanceof BuildingDTO){
-			return ROW_COLUMN_NUM_CONDITION_MATCHED;
-		}
-		return 0;
-	}
-
 
 	private static void createRowCell(CellStyle style, Row row, int cellIndex, Object value) {
 		Cell cell = row.createCell(cellIndex);
-		cell.setCellValue(value==null?"":value.toString());
+		cell.setCellValue(value == null ? "" : value.toString());
 		cell.setCellStyle(style);
 	}
 
@@ -190,22 +178,26 @@ public class ExcelGenerator {
 		Row header = sheet.createRow(rowIndex);
 
 		CellStyle headerStyle = workbook.createCellStyle();
-		headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		headerStyle.setFillForegroundColor(IndexedColors.BRIGHT_GREEN.getIndex());
+		headerStyle.setFillPattern(FillPatternType.NO_FILL);
+		headerStyle.setWrapText(false);
+		headerStyle.setAlignment(HorizontalAlignment.CENTER);
+		headerStyle.setShrinkToFit(true);
 
 		XSSFFont font = ((XSSFWorkbook) workbook).createFont();
 		font.setFontName("Arial");
-		font.setFontHeightInPoints((short) 16);
+		font.setFontHeightInPoints((short) 12);
 		font.setBold(true);
 		headerStyle.setFont(font);
 
 		List<String> headerColumnList = blockHeaderColumnMap.get(block);
 		if (!CollectionUtils.isEmpty(headerColumnList)) {
-
-			for(String item: headerColumnList){
-				Cell headerCell = header.createCell(0);
+			int columnIndex = 0;
+			for (String item : headerColumnList) {
+				Cell headerCell = header.createCell(columnIndex);
 				headerCell.setCellValue(item);
 				headerCell.setCellStyle(headerStyle);
+				columnIndex++;
 			}
 		}
 	}
@@ -214,8 +206,11 @@ public class ExcelGenerator {
 		rowIndex++;
 		Row header = sheet.createRow(rowIndex);
 		CellStyle headerStyle = workbook.createCellStyle();
-		headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+		headerStyle.setFillForegroundColor(IndexedColors.YELLOW1.getIndex());
 		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		headerStyle.setAlignment(HorizontalAlignment.CENTER_SELECTION);
+		headerStyle.setWrapText(false);
+		headerStyle.setShrinkToFit(true);
 
 		XSSFFont font = ((XSSFWorkbook) workbook).createFont();
 		font.setFontName("Arial");
@@ -227,7 +222,7 @@ public class ExcelGenerator {
 		headerCell.setCellValue(block.getValue());
 		headerCell.setCellStyle(headerStyle);
 
-		CellRangeAddress cellRange = new CellRangeAddress(rowIndex, rowIndex++, 0, 7);
+		CellRangeAddress cellRange = new CellRangeAddress(rowIndex, rowIndex, 0, 7);
 		sheet.addMergedRegion(cellRange);
 	}
 
@@ -240,8 +235,8 @@ public class ExcelGenerator {
 			}
 		}
 	}
-	
-	enum HEADER_COLUMNS_AVG_PRICE{
+
+	enum HEADER_COLUMNS_AVG_PRICE {
 		plate(1, "Plate"), avg_price(2, "Avg price");
 		int code;
 		String value;
@@ -269,12 +264,9 @@ public class ExcelGenerator {
 	}
 
 	enum HEADER_COLUMNS_CONDITION_MATCHED {
-		name(1, "name"), location(2, "location"), 
-		avgPriceTxt(3, "avgPriceTxt"), 
-		plate(4, "plate"), 
-		totalPrice(5,"totalPrice"), 
-		source(6, "source");
-		
+		name(1, "name"), location(2, "location"), avgPriceTxt(3, "avgPriceTxt"), plate(4, "plate"), totalPrice(5,
+				"totalPrice"), source(6, "source");
+
 		int code;
 		String value;
 
@@ -299,7 +291,6 @@ public class ExcelGenerator {
 			this.value = value;
 		}
 	}
-
 
 	enum BLOCK {
 		avg_price(1, "Average price per plate"), condition_matched(2, "Matched Condition");
@@ -327,22 +318,31 @@ public class ExcelGenerator {
 			this.value = value;
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		List<BuildingAvgPriceDTO> buildingAvgPriceList = new ArrayList<BuildingAvgPriceDTO>();
 		List<BuildingDTO> buildingList = new ArrayList<BuildingDTO>();
-		
-		BuildingDTO building = new BuildingDTO();
-		building.setName("test");
-		building.setLocation("location 1");
-		
-		BuildingAvgPriceDTO avgPrice = new BuildingAvgPriceDTO();
-		avgPrice.setPlate("plate 222");
-		avgPrice.setAvgPrice(32.33D);
-		
-		buildingAvgPriceList.add(avgPrice);
-		buildingList.add(building);
-		
+
+		BuildingDTO building1 = new BuildingDTO();
+		building1.setName("test1 深色的多个多个环境很简洁");
+		building1.setLocation("location 1");
+
+		BuildingDTO building2 = new BuildingDTO();
+		building2.setName("test1");
+		building2.setLocation("location 2 深色的多个多个环境很简洁");
+
+		BuildingAvgPriceDTO avgPrice1 = new BuildingAvgPriceDTO();
+		avgPrice1.setPlate("plate 11");
+		avgPrice1.setAvgPrice(32.33D);
+		BuildingAvgPriceDTO avgPrice2 = new BuildingAvgPriceDTO();
+		avgPrice2.setPlate("plate 22深色的多个多个环境很简洁");
+		avgPrice2.setAvgPrice(322.33D);
+
+		buildingAvgPriceList.add(avgPrice1);
+		buildingAvgPriceList.add(avgPrice2);
+		buildingList.add(building1);
+		buildingList.add(building2);
+
 		generateExcelFile(buildingAvgPriceList, buildingList);
 	}
 
