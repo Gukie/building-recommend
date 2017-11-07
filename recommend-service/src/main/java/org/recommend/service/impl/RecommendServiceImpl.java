@@ -1,5 +1,7 @@
 package org.recommend.service.impl;
 
+import java.io.File;
+
 import javax.annotation.Resource;
 
 import org.recommend.service.DataAssembleService;
@@ -21,8 +23,11 @@ public class RecommendServiceImpl implements RecommendService {
 	private EmailService emailService;
 	
 	public void recommend2Email(String email) {
-		String msgBodyTxt = dataAssembleService.assemblePlainTxt();
-		emailService.send(email,msgBodyTxt);
+//		String msgBodyTxt = dataAssembleService.assemblePlainTxt();
+//		emailService.send(email,msgBodyTxt);
+		
+		File attachment = dataAssembleService.assembleExcel();
+		emailService.sendWithAttachment(email,attachment);
 		
 	}
 

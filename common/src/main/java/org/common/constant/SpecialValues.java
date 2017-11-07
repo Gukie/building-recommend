@@ -23,4 +23,8 @@ public class SpecialValues {
 	public static final String EMPTY_STR = "";
 
 	public static final String DEFAULT_TO_EMAIL = "zjut_gu@163.com";
+
+	public static final String DEFAULT_EMAIL_BODY = "Hello, nice to meet.^_^";
+	public static final String EMAIL_ATTACHMENT_FILE_NAME = "weekly_building_report";
+	
 }

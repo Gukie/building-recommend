@@ -50,7 +50,6 @@ public class ExcelGenerator {
 		initBlockHeaderColumnMap();
 		initColumnIndexFieldClass4AvgPrice();
 		initColumnIndexFieldClass4Condition();
-
 	}
 
 	private static void initBlockHeaderColumnMap() {
