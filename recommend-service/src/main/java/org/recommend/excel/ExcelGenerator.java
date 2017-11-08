@@ -23,8 +23,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.common.constant.SpecialValues;
 import org.common.model.BuildingAvgPriceDTO;
 import org.common.model.BuildingDTO;
+import org.common.query.BuildingQuery;
 import org.common.utils.FileUtils;
 import org.springframework.util.CollectionUtils;
 
@@ -87,7 +89,7 @@ public class ExcelGenerator {
 		}
 	}
 
-	public static File generateExcelFile(List<BuildingAvgPriceDTO> buildingAvgPriceList,
+	public static File generateExcelFile(BuildingQuery buildingQuery, List<BuildingAvgPriceDTO> buildingAvgPriceList,
 			List<BuildingDTO> buildingList) {
 		Workbook workbook = null;
 		rowIndex = 0;
@@ -96,12 +98,12 @@ public class ExcelGenerator {
 			Sheet sheet = workbook.createSheet(EXCEL_SHEET_NAME);
 
 			// avg price
-			createBlockTitleRow(workbook, sheet, BLOCK.avg_price);
+			createBlockTitleRow(workbook, sheet, getBlockTitle(BLOCK.avg_price,buildingQuery));
 			createBlockHeaderRow(workbook, sheet, BLOCK.avg_price);
 			createBlockDataRow(workbook, sheet, buildingAvgPriceList);
 
 			// condition
-			createBlockTitleRow(workbook, sheet, BLOCK.condition_matched);
+			createBlockTitleRow(workbook, sheet, getBlockTitle(BLOCK.condition_matched,buildingQuery));
 			createBlockHeaderRow(workbook, sheet, BLOCK.condition_matched);
 			createBlockDataRow(workbook, sheet, buildingList);
 
@@ -123,6 +125,31 @@ public class ExcelGenerator {
 			closeWorkbook(workbook);
 		}
 		return null;
+	}
+
+	private static String getBlockTitle(BLOCK block, BuildingQuery buildingQuery) {
+		if(BLOCK.avg_price == block){
+			return block.getValue();
+		}
+		if(BLOCK.condition_matched == block){
+			StringBuilder result = new StringBuilder();
+			result.append(block.getValue());
+			result.append(SpecialValues.COLON_STR);
+			result.append(generatePriceRange(buildingQuery));
+			return result.toString();
+		}
+		return SpecialValues.EMPTY_STR;
+	}
+
+	private static String generatePriceRange(BuildingQuery buildingQuery) {
+		if(buildingQuery == null){
+			return SpecialValues.CONDITION_MATCHED_ALL;
+		}
+		StringBuilder result = new StringBuilder();
+		result.append("price between [");
+		result.append(buildingQuery.getAvgPriceRangeStart()).append("]");
+		result.append(" and [").append(buildingQuery.getAvgPriceRangeEnd()).append("]");
+		return result.toString();
 	}
 
 	private static <T> void createBlockDataRow(Workbook workbook, Sheet sheet, List<T> itemList)
@@ -201,7 +228,7 @@ public class ExcelGenerator {
 		}
 	}
 
-	private static void createBlockTitleRow(Workbook workbook, Sheet sheet, BLOCK block) {
+	private static void createBlockTitleRow(Workbook workbook, Sheet sheet, String blockTitle) {
 		rowIndex++;
 		Row header = sheet.createRow(rowIndex);
 		CellStyle headerStyle = workbook.createCellStyle();
@@ -218,7 +245,7 @@ public class ExcelGenerator {
 		headerStyle.setFont(font);
 
 		Cell headerCell = header.createCell(0);
-		headerCell.setCellValue(block.getValue());
+		headerCell.setCellValue(blockTitle);
 		headerCell.setCellStyle(headerStyle);
 
 		CellRangeAddress cellRange = new CellRangeAddress(rowIndex, rowIndex, 0, 7);
@@ -342,7 +369,8 @@ public class ExcelGenerator {
 		buildingList.add(building1);
 		buildingList.add(building2);
 
-		generateExcelFile(buildingAvgPriceList, buildingList);
+		BuildingQuery buildingQuery = new BuildingQuery();
+		generateExcelFile(buildingQuery,buildingAvgPriceList, buildingList);
 	}
 
 }

@@ -10,4 +10,8 @@
 	default-autowire="byName">
 	
 	<bean id="oauth2Authenticator" class="org.recommend.oauth2.MyOAuth2Authenticator" init-method="init"></bean>
+	<bean id="dataAssembleService" class="org.recommend.service.impl.DataAssembleServiceImpl">
+		<property name="priceRangeFrom" value="${price.range.from}"></property>
+		<property name="priceRangeTo" value="${price.range.to}"></property>
+	</bean>
 </beans>

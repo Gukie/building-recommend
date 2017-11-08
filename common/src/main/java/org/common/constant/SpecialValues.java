@@ -8,6 +8,7 @@ public class SpecialValues {
 	
 	public static final String DELIMITER_STR = "-"; // 分割符
 	public static final String EMPTY_STR = "";
+	public static final String COLON_STR = ":";
 
 	/**
 	 * 全表查询是的板块名称
@@ -29,5 +30,6 @@ public class SpecialValues {
 
 	public static final String DEFAULT_EMAIL_BODY = "Hello, nice to meet.^_^";
 	public static final String EMAIL_ATTACHMENT_FILE_NAME = "weekly_building_report.xlsx";
+	public static final String CONDITION_MATCHED_ALL = "all buildings";
 	
 }

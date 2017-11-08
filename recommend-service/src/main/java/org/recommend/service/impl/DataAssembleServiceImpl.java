@@ -15,26 +15,52 @@ import org.recommend.client.DataServiceClient;
 import org.recommend.excel.ExcelGenerator;
 import org.recommend.service.DataAssembleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 /**
  * @author gushu
  * @date 2017/11/02
  */
-@Service("dataAssembleService")
+//@Service("dataAssembleService")
 public class DataAssembleServiceImpl implements DataAssembleService {
 
 	@Autowired
 	private DataServiceClient dataClient;
 	
+	private Integer priceRangeFrom = 0;
+	private Integer priceRangeTo = Integer.MAX_VALUE;
+	
+	public Integer getPriceRangeFrom() {
+		return priceRangeFrom;
+	}
+
+	public void setPriceRangeFrom(Integer priceRangeFrom) {
+		this.priceRangeFrom = priceRangeFrom;
+	}
+
+	public Integer getPriceRangeTo() {
+		return priceRangeTo;
+	}
+
+	public void setPriceRangeTo(Integer priceRangeTo) {
+		this.priceRangeTo = priceRangeTo;
+	}
+
+	@Override
 	public String assemblePlainTxt() {
 		List<BuildingAvgPriceDTO> avgPriceDTOList4All = dataClient.getAvgPriceByPlateType(PlateTypeEnum.ALL.getValue());
 		List<BuildingAvgPriceDTO> avgPriceDTOList4Per = dataClient.getAvgPriceByPlateType(PlateTypeEnum.PER.getValue());
-		BuildingQuery buildingQuery = new BuildingQuery();
+		BuildingQuery buildingQuery = generateBuildingQuery();
 		List<BuildingDTO>  buildignDTOList = dataClient.getBuildingByCondition(JSON.toJSONString(buildingQuery));
 	
 		return generatePlainTxt(avgPriceDTOList4All,avgPriceDTOList4Per,buildignDTOList);
+	}
+
+	private BuildingQuery generateBuildingQuery() {
+		BuildingQuery buildingQuery = new BuildingQuery();
+		buildingQuery.setAvgPriceRangeStart(priceRangeFrom);
+		buildingQuery.setAvgPriceRangeEnd(priceRangeTo);
+		return buildingQuery;
 	}
 	
 	private String generatePlainTxt(List<BuildingAvgPriceDTO> avgPriceDTOList4All,
@@ -49,19 +75,15 @@ public class DataAssembleServiceImpl implements DataAssembleService {
 		return result.toString();
 	}
 
+	@Override
 	public File assembleExcel() {
+		BuildingQuery buildingQuery = generateBuildingQuery();
 		
 		List<BuildingAvgPriceDTO> avgPriceDTOList = getAvgPriceDTOList();
-		List<BuildingDTO> conditionBuildingList = getConditionBuildingList();
-		return ExcelGenerator.generateExcelFile(avgPriceDTOList,conditionBuildingList);
+		List<BuildingDTO> conditionBuildingList = dataClient.getBuildingByCondition(JSON.toJSONString(buildingQuery));
+		return ExcelGenerator.generateExcelFile(buildingQuery,avgPriceDTOList,conditionBuildingList);
 	}
 
-	private List<BuildingDTO> getConditionBuildingList() {
-		BuildingQuery buildingQuery = new BuildingQuery();
-		buildingQuery.setAvgPriceRangeStart(10000);
-		buildingQuery.setAvgPriceRangeEnd(20000);
-		return dataClient.getBuildingByCondition(JSON.toJSONString(buildingQuery));
-	}
 
 	private List<BuildingAvgPriceDTO> getAvgPriceDTOList() {
 		List<BuildingAvgPriceDTO> result = new ArrayList<BuildingAvgPriceDTO>();
