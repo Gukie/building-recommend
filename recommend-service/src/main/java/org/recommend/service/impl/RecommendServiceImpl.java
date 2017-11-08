@@ -1,9 +1,11 @@
 package org.recommend.service.impl;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.annotation.Resource;
 
+import org.common.utils.FileUtils;
 import org.recommend.service.DataAssembleService;
 import org.recommend.service.EmailService;
 import org.recommend.service.RecommendService;
@@ -27,7 +29,19 @@ public class RecommendServiceImpl implements RecommendService {
 //		emailService.send(email,msgBodyTxt);
 		
 		File attachment = dataAssembleService.assembleExcel();
-		emailService.sendWithAttachment(email,attachment);
+		try {
+			emailService.sendWithAttachment(email,attachment);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(attachment!=null){
+				try {
+					FileUtils.deleteTmpFile(attachment.getCanonicalPath());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		
 	}
 

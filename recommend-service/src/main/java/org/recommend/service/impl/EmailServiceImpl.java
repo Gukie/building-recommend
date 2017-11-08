@@ -16,6 +16,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.sun.mail.smtp.SMTPTransport;
 import org.apache.commons.lang.StringUtils;
 import org.common.constant.SpecialValues;
 import org.recommend.oauth2.MyOAuth2Authenticator;
@@ -23,8 +24,6 @@ import org.recommend.service.EmailService;
 import org.recommend.utils.EmailBasicInfoUtils;
 import org.recommend.utils.RecommendPropKeys;
 import org.springframework.stereotype.Service;
-
-import com.sun.mail.smtp.SMTPTransport;
 
 /**
  * refer:
@@ -95,8 +94,7 @@ public class EmailServiceImpl implements EmailService {
 				.valueOf(EmailBasicInfoUtils.getBasicProperties().getProperty(RecommendPropKeys.MAIL_DEBUG));
 		Session session = oAuth2Authenticator.getSmtpSession(oauthToken, debug);
 		Multipart attachment = generateAttachment(attachedFile);
-		sendByGmail(session, targetEmail, null, attachment, oauthToken, debug);
-		return false;
+		return sendByGmail(session, targetEmail, null, attachment, oauthToken, debug);
 	}
 
 	private Multipart generateAttachment(File attachment) {
@@ -115,7 +113,5 @@ public class EmailServiceImpl implements EmailService {
 			e.printStackTrace();
 		}
 		return multipart;
-
 	}
-
 }
