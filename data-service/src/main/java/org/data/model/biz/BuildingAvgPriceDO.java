@@ -7,19 +7,18 @@ package org.data.model.biz;
 public class BuildingAvgPriceDO {
 
 //	location, AVG(avg_price) as avg_price_per_area
-	private String location; //  like '滨江'
-	private Double avgPricePerArea;
-	public String getLocation() {
-		return location;
+	private String plate; //  like '滨江'
+	private Double avgPrice;
+	public String getPlate() {
+		return plate;
 	}
-	public void setLocation(String location) {
-		this.location = location;
+	public void setPlate(String plate) {
+		this.plate = plate;
 	}
-	public Double getAvgPricePerArea() {
-		return avgPricePerArea;
+	public Double getAvgPrice() {
+		return avgPrice;
 	}
-	public void setAvgPricePerArea(Double avgPricePerArea) {
-		this.avgPricePerArea = avgPricePerArea;
+	public void setAvgPrice(Double avgPrice) {
+		this.avgPrice = avgPrice;
 	}
-	
 }

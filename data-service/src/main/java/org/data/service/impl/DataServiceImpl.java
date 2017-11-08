@@ -115,9 +115,8 @@ public class DataServiceImpl implements DataService {
 				return result;
 			}
 			for (BuildingAvgPriceDO item : avgPriceMapList) {
-				String plate = item.getLocation();
-				Double avgPrice = item.getAvgPricePerArea();
-				BuildingAvgPriceDTO dtoItem = generateBuildingAvgPriceDTO(plate, avgPrice);
+				BuildingAvgPriceDTO dtoItem = new BuildingAvgPriceDTO();
+				BeanUtils.copyProperties(item, dtoItem);
 				result.add(dtoItem);
 			}
 		}

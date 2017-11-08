@@ -84,7 +84,7 @@ public class BuildingDAOTest extends BaseDAOTest {
 	public void testGetAvgPricePerArea() {
 		List<BuildingAvgPriceDO> result = buildingDAO.getAvgPricePerArea();
 		for (BuildingAvgPriceDO item : result) {
-			System.out.println(item.getLocation() + ":" + item.getAvgPricePerArea());
+			System.out.println(item.getPlate() + ":" + item.getAvgPrice());
 		}
 	}
 }

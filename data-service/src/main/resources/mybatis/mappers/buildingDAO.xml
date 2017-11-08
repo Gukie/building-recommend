@@ -14,8 +14,8 @@
 		<result column="source" property="source"/>
 	</resultMap>
 	<resultMap type="org.data.model.biz.BuildingAvgPriceDO" id="buildingAvgPriceDO">
-		<result column="location" property="location"/>
-		<result column="avg_price_per_area" property="avgPricePerArea"/>
+		<result column="plate" property="plate"/>
+		<result column="avg_price_per_plate" property="avgPrice"/>
 	</resultMap>
 	
 	<sql id="Base_Column_List">
@@ -97,13 +97,13 @@
 	</select>
 	<select id="getAvgPricePerArea" resultMap="buildingAvgPriceDO">
 		SELECT 
-			location, AVG(avg_price) as avg_price_per_area
+			plate, AVG(avg_price) as avg_price_per_plate
 		FROM 
 			building 
 		WHERE 
 			avg_price !=0 
 		GROUP BY
-			location
+			plate
 	</select>
 	
 	<select id="getBuildingByCondition" resultMap="buildingDO">
