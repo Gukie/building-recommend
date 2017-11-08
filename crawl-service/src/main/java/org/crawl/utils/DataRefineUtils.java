@@ -67,6 +67,9 @@ public class DataRefineUtils {
 		}
 		int firstDelimiterIndex = plate.indexOf(SpecialValues.DELIMITER_STR);
 		String newPlate = plate.substring(0, firstDelimiterIndex);
+		if(newPlate.contains(SpecialValues.CITY_SUFFIX)){
+			return newPlate;
+		}
 		if(!newPlate.contains(SpecialValues.PLATE_SUFFIX)){
 			newPlate= newPlate+SpecialValues.PLATE_SUFFIX;
 		}
@@ -74,7 +77,8 @@ public class DataRefineUtils {
 	}
 	
 //	public static void main(String[] args) {
-//		String teString = "西湖区-之江转塘象山路与鸡山路交叉口西南角 ";
+////		String teString = "西湖区-之江转塘象山路与鸡山路交叉口西南角 ";
+//		String teString = "诸暨市-之江转塘象山路与鸡山路交叉口西南角 ";
 //		String plate = getRefinedPlate(teString);
 //		String location = getRefinedLocation(teString);
 //		System.err.println("plate:"+plate);

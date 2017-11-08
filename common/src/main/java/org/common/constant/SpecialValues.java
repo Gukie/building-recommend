@@ -24,6 +24,7 @@ public class SpecialValues {
 	 */
 	public static final String RANGE_PRICE_KEY_WORD = DELIMITER_STR;
 	public static final String PLATE_SUFFIX = "区";
+	public static final String CITY_SUFFIX = "市";
 	public static final String DEFAULT_TO_EMAIL = "zjut_gu@163.com";
 
 	public static final String DEFAULT_EMAIL_BODY = "Hello, nice to meet.^_^";
