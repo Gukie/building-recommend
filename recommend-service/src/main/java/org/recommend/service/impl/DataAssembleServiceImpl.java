@@ -58,6 +58,8 @@ public class DataAssembleServiceImpl implements DataAssembleService {
 
 	private List<BuildingDTO> getConditionBuildingList() {
 		BuildingQuery buildingQuery = new BuildingQuery();
+		buildingQuery.setAvgPriceRangeStart(10000);
+		buildingQuery.setAvgPriceRangeEnd(20000);
 		return dataClient.getBuildingByCondition(JSON.toJSONString(buildingQuery));
 	}
 
