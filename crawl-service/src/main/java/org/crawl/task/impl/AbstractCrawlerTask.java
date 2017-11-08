@@ -8,7 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.common.enums.BuildingSourceEnum;
 import org.common.model.BuildingDTO;
 import org.crawl.bean.BuildingPageInfo;
-import org.crawl.utils.RegexUtils;
+import org.crawl.utils.DataRefineUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -53,21 +53,17 @@ public abstract class AbstractCrawlerTask  implements Callable<List<BuildingDTO>
 
 	public void parseElement(Element element) {
 		String buildingName = parseBuildingNameStr(element);
+		String plate = parsePlateStr(element);
 		String location = parseLocationStr(element);
-		String area = parseAreaStr(element);
 		String averageTxt = parseAveragePriceStr(element);
 		
 		BuildingDTO buildingDTO = new BuildingDTO();
 		buildingDTO.setName(buildingName);
 		buildingDTO.setLocation(location);
-		buildingDTO.setPlate(area);
+		buildingDTO.setPlate(plate);
 		buildingDTO.setAvgPriceTxt(averageTxt);
-		if(RegexUtils.isTotalPriceTxt(averageTxt)){
-			buildingDTO.setTotalPrice(RegexUtils.getTotalPriceDigitStr(averageTxt));
-		}else{
-			buildingDTO.setAvgPrice(RegexUtils.getDigitNum(averageTxt));
-		}
 		buildingDTO.setSource(sourceEnum.getValue());
+		DataRefineUtils.refineBuilding(buildingDTO);
 		crawledDataList.add(buildingDTO);
 //		PoolUtils.BUILDING_POOL.add(buildingDTO);
 //		System.out.println(buildingName + "," + location + "," + area + "," + average);
@@ -87,12 +83,12 @@ public abstract class AbstractCrawlerTask  implements Callable<List<BuildingDTO>
 		return tmpResult;
 	}
 
-	private String parseAreaStr(Element element) {
+	private String parseLocationStr(Element element) {
 		Elements elements = parseArea(element);
 		return getElementsText(elements);
 	}
 
-	private String parseLocationStr(Element element) {
+	private String parsePlateStr(Element element) {
 		Elements elements = parseLocation(element);
 		return getElementsText(elements);
 	}

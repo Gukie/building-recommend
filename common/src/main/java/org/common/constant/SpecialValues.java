@@ -5,6 +5,9 @@ package org.common.constant;
  * @date 2017/11/01
  */
 public class SpecialValues {
+	
+	public static final String DELIMITER_STR = "-"; // 分割符
+	public static final String EMPTY_STR = "";
 
 	/**
 	 * 全表查询是的板块名称
@@ -19,9 +22,8 @@ public class SpecialValues {
 	/**
 	 * 价格范围的关键字
 	 */
-	public static final String RANGE_PRICE_KEY_WORD = "-";
-	public static final String EMPTY_STR = "";
-
+	public static final String RANGE_PRICE_KEY_WORD = DELIMITER_STR;
+	public static final String PLATE_SUFFIX = "区";
 	public static final String DEFAULT_TO_EMAIL = "zjut_gu@163.com";
 
 	public static final String DEFAULT_EMAIL_BODY = "Hello, nice to meet.^_^";

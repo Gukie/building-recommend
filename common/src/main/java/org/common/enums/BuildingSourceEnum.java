@@ -1,9 +1,10 @@
 package org.common.enums;
 
+import java.util.Objects;
+
 public enum BuildingSourceEnum {
 
-	ZHU_JIA_YI(1,"zhujiayi","筑家易"),LIAN_JIA(2,"lianjia","链家")
-	;
+	ZHU_JIA_YI(1,"zhujiayi","筑家易"),LIAN_JIA(2,"lianjia","链家");
 	
 	private int code;
 	private String value;
@@ -34,6 +35,14 @@ public enum BuildingSourceEnum {
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}
-	
+
+	public static BuildingSourceEnum parseTxt(String txt) {
+		for(BuildingSourceEnum item: BuildingSourceEnum.values()){
+			if(Objects.equals(item.getValue(), txt)){
+				return item;
+			}
+		}
+		return null;
+	}
 	
 }
