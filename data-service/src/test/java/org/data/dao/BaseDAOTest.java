@@ -1,4 +1,4 @@
-package org.data.service;
+package org.data.dao;
 
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;

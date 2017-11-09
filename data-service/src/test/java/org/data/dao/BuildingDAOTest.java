@@ -1,4 +1,4 @@
-package org.data.service;
+package org.data.dao;
 
 import java.util.List;
 

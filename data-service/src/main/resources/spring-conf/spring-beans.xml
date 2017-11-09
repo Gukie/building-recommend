@@ -10,4 +10,9 @@
 	default-autowire="byName">
 	
 	<bean id="buildingCache" class="org.data.cache.BuildingCache" init-method="init"></bean>
+	<bean id="elkDataService" class="org.data.service.impl.ElkDataServiceImpl" init-method="init" destroy-method="release">
+		<property name="host" value="${elastic.search.host}"></property>
+		<property name="port" value="${elastic.search.port}"></property>
+		<property name="scheme" value="${elastic.search.scheme}"></property>
+	</bean>
 </beans>
