@@ -14,5 +14,7 @@
 		<property name="host" value="${elastic.search.host}"></property>
 		<property name="port" value="${elastic.search.port}"></property>
 		<property name="scheme" value="${elastic.search.scheme}"></property>
+		<property name="username" value="${elastic.search.username}"></property>
+		<property name="password" value="${elastic.search.password}"></property>
 	</bean>
 </beans>
