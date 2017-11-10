@@ -8,6 +8,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import com.alibaba.fastjson.JSON;
+
 import org.common.model.BuildingDTO;
 import org.crawl.client.DataServiceClient;
 import org.crawl.service.CrawlService;
@@ -19,8 +21,6 @@ import org.crawl.utils.PoolUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
-import com.alibaba.fastjson.JSON;
 
 /**
  * @author gushu
@@ -34,6 +34,7 @@ public class CrawlServiceImpl implements CrawlService {
 	@Autowired
     private DataServiceClient dataServiceClient;
 
+	@Override
 	public void crawl() {
 		initCompletionService();
 		long start = System.currentTimeMillis();
@@ -77,7 +78,9 @@ public class CrawlServiceImpl implements CrawlService {
 					continue;
 				}
 				for(BuildingDTO item: buildingDTOList) {
-					dataServiceClient.addBuilding(JSON.toJSONString(item));
+					String buildingJsonStr = JSON.toJSONString(item);
+					dataServiceClient.addBuilding(buildingJsonStr);
+					dataServiceClient.createIndex(buildingJsonStr);
 					System.out.println("added:"+PoolUtils.ADDED_COUNTER.incrementAndGet());
 				}
 			} catch (InterruptedException e) {

@@ -2,6 +2,7 @@ package org.data.service;
 
 import javax.annotation.Resource;
 
+import org.common.constant.SpecialValues;
 import org.common.model.BuildingDTO;
 import org.data.enums.DBTableEnum;
 import org.data.utils.GeneratorUtils;
@@ -27,7 +28,7 @@ public class ElkDataServiceTest extends ServiceBaseTest {
 		buildingDTO.setId(generator.generateId(DBTableEnum.building));
 		buildingDTO.setName("古树");
 		buildingDTO.setLocation("滨江");
-		boolean isCreated =  elkDataService.index(buildingDTO);
-		Assert.assertTrue(isCreated);
+		String indexId =  elkDataService.index(buildingDTO);
+		Assert.assertNotEquals(SpecialValues.EMPTY_STR, indexId);
 	}
 }

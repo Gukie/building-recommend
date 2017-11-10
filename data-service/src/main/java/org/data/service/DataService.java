@@ -20,4 +20,5 @@ public interface DataService {
 	List<BuildingAvgPriceDTO> getAvgPriceByPlateType(PlateTypeEnum plateType);
 	
 	List<BuildingDTO> getBuildingByCondition(BuildingQuery query); 
+	
 }

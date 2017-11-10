@@ -15,6 +15,7 @@ import org.common.model.BuildingDTO;
 import org.common.query.BuildingQuery;
 import org.common.result.BaseResult;
 import org.data.service.DataService;
+import org.data.service.ElkDataService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -41,6 +42,9 @@ public class DataServiceApp {
 
 	@Resource(name = "dataService")
 	private DataService dataService;
+	
+	@Resource(name="elkDataService")
+	private ElkDataService elkDataService;
 
 	// @RequestMapping(value="/store",method=RequestMethod.POST)
 	// public String store(@RequestParam("buildingJsonStr") String
@@ -81,6 +85,12 @@ public class DataServiceApp {
 	@RequestMapping(value = "/store", method = RequestMethod.POST)
 	public String store(@RequestBody BuildingDTO buildingDTO) {
 		dataService.add(buildingDTO);
+		return BaseResult.SUCCESS;
+	}
+	
+	@RequestMapping(value = "/createIndex", method = RequestMethod.POST)
+	public String createIndex(@RequestBody BuildingDTO buildingDTO) {
+		elkDataService.index(buildingDTO);
 		return BaseResult.SUCCESS;
 	}
 

@@ -8,5 +8,11 @@ import org.common.model.BuildingDTO;
  */
 public interface ElkDataService {
 
-	boolean index(BuildingDTO buildingDTO);
+	/**
+	 * create index into ES.
+	 * 
+	 * @param buildingDTO
+	 * @return index id, which is buildingId
+	 */
+	String index(BuildingDTO buildingDTO);
 }

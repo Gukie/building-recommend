@@ -26,4 +26,7 @@ public interface DataServiceClient {
 	
 	@RequestMapping(value = "/getExistingBuildingName", method = RequestMethod.GET)
 	String getExistingBuildingName();
+	
+	@RequestMapping(value = "/createIndex", method = RequestMethod.POST,consumes={MediaType.APPLICATION_JSON_VALUE})
+	String createIndex(String buildingJsonStr);
 }
