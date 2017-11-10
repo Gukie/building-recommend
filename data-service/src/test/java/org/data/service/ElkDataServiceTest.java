@@ -2,12 +2,10 @@ package org.data.service;
 
 import javax.annotation.Resource;
 
-import com.alibaba.fastjson.JSON;
-
 import org.common.model.BuildingDTO;
 import org.data.enums.DBTableEnum;
 import org.data.utils.GeneratorUtils;
-import org.elasticsearch.action.index.IndexResponse;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,7 +26,8 @@ public class ElkDataServiceTest extends ServiceBaseTest {
 		BuildingDTO buildingDTO  = new BuildingDTO();
 		buildingDTO.setId(generator.generateId(DBTableEnum.building));
 		buildingDTO.setName("古树");
-		IndexResponse response = elkDataService.index(buildingDTO);
-		System.err.println(JSON.toJSONString(response));
+		buildingDTO.setLocation("滨江");
+		boolean isCreated =  elkDataService.index(buildingDTO);
+		Assert.assertTrue(isCreated);
 	}
 }

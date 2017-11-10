@@ -12,6 +12,7 @@ import org.common.constant.SpecialValues;
 import org.common.enums.IndexTypeEnum;
 import org.common.model.BuildingDTO;
 import org.data.service.ElkDataService;
+import org.elasticsearch.action.DocWriteResponse.Result;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RestClient;
@@ -82,17 +83,18 @@ public class ElkDataServiceImpl implements ElkDataService {
 		}
 	}
 	@Override
-	public IndexResponse index(BuildingDTO buildingDTO) {
-		IndexRequest request = new IndexRequest(IndexTypeEnum.building.getValue(),"test");
+	public boolean index(BuildingDTO buildingDTO) {
+		IndexRequest request = new IndexRequest(IndexTypeEnum.building.getValue(),"test",buildingDTO.getId());
 		request.source(JSON.toJSONString(buildingDTO), XContentType.JSON);
 		try {
 			Header header = new BasicHeader("Authorization",generateToken());
-			return restClient.index(request,header);
+			IndexResponse response =  restClient.index(request,header);
+			return Result.CREATED == response.getResult();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		return null;
+		return false;
 	}
 	/**
 	 * refer: 

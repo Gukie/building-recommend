@@ -1,7 +1,6 @@
 package org.data.service;
 
 import org.common.model.BuildingDTO;
-import org.elasticsearch.action.index.IndexResponse;
 
 /**
  * @author gushu
@@ -9,5 +8,5 @@ import org.elasticsearch.action.index.IndexResponse;
  */
 public interface ElkDataService {
 
-	IndexResponse index(BuildingDTO buildingDTO);
+	boolean index(BuildingDTO buildingDTO);
 }
