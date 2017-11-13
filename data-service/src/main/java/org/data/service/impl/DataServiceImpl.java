@@ -25,7 +25,7 @@ import org.springframework.util.CollectionUtils;
  * @date 2017/10/09
  */
 @Service("dataService")
-public class DataServiceImpl implements DataService {
+public class DataServiceImpl extends BaseDataServiceImpl implements DataService {
 
 	@Autowired
 	private BuildingDAO buildingDAO;
@@ -33,6 +33,7 @@ public class DataServiceImpl implements DataService {
 	@Autowired
 	private GeneratorUtils generator;
 
+	@Override
 	@Transactional
 	public String add(BuildingDTO buildingDTO) {
 		BuildingDO existingBuilding = getBuildingFromCache(buildingDTO.getName());
@@ -66,13 +67,9 @@ public class DataServiceImpl implements DataService {
 		return CacheDataUtils.buildingNameDOMap.get(buildingName);
 	}
 
-	private BuildingDO convert2DO(BuildingDTO buildingDTO) {
-		BuildingDO target = new BuildingDO();
-		BeanUtils.copyProperties(buildingDTO, target);
-		;
-		return target;
-	}
+	
 
+	@Override
 	public List<String> getExistingBuildingName() {
 		List<String> exitingBuildingNameList = buildingDAO.getExistingBuildingName();
 		if (CollectionUtils.isEmpty(exitingBuildingNameList)) {
@@ -81,6 +78,7 @@ public class DataServiceImpl implements DataService {
 		return exitingBuildingNameList;
 	}
 
+	@Override
 	public List<BuildingDTO> getBuildingByCondition(BuildingQuery query) {
 		List<BuildingDO> buildingDOList = buildingDAO.getBuildingByCondition(query);
 		if (CollectionUtils.isEmpty(buildingDOList)) {
@@ -89,19 +87,7 @@ public class DataServiceImpl implements DataService {
 		return convert2DTO(buildingDOList);
 	}
 
-	private List<BuildingDTO> convert2DTO(List<BuildingDO> buildingDOList) {
-		List<BuildingDTO> result = new ArrayList<BuildingDTO>();
-		if (CollectionUtils.isEmpty(buildingDOList)) {
-			return result;
-		}
-		for (BuildingDO item : buildingDOList) {
-			BuildingDTO dtoItem = new BuildingDTO();
-			BeanUtils.copyProperties(item, dtoItem);
-			result.add(dtoItem);
-		}
-		return result;
-	}
-
+	@Override
 	public List<BuildingAvgPriceDTO> getAvgPriceByPlateType(PlateTypeEnum plateType) {
 		List<BuildingAvgPriceDTO> result = new ArrayList<BuildingAvgPriceDTO>();
 

@@ -14,7 +14,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	
+
 	<build>
 		<filters>
 			<filter>${filter.path}</filter>
@@ -27,7 +27,7 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
-		
+
 		<testResources>
 			<testResource>
 				<directory>src/test/resources</directory>
@@ -35,8 +35,8 @@
 			</testResource>
 		</testResources>
 	</build>
-	
-	
+
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

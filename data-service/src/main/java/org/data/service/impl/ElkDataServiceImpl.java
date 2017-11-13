@@ -30,7 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @date 2017/11/09
  */
 // @Service("elkDataService")
-public class ElkDataServiceImpl implements ElkDataService {
+public class ElkDataServiceImpl extends BaseDataServiceImpl implements ElkDataService {
 
 	private Logger logger = LoggerFactory.getLogger(ElkDataServiceImpl.class);
 
