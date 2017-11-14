@@ -2,15 +2,13 @@ package org.data.model.db;
 
 import java.util.Date;
 
-import org.springframework.data.annotation.Id;
-
 /**
  * @author gushu
  * @date 2017/09/29
  */
 public class BaseDO {
 
-	@Id
+//	@Id
 	private String id;
 	private Date gmtCreated;
 	private Date gmtModified;
