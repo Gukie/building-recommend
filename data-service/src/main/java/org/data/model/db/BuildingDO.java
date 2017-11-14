@@ -1,5 +1,8 @@
 package org.data.model.db;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection="building")
 public class BuildingDO extends BaseDO {
 
 	private String name;
