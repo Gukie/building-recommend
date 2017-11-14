@@ -1,6 +1,9 @@
 package org.data.service;
 
+import com.alibaba.fastjson.JSON;
+
 import org.common.model.BuildingDTO;
+import org.data.model.db.BuildingDO;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,6 +22,7 @@ public class MongoDataServiceTest extends ServiceBaseTest{
 		buildingDTO.setName("junit test");
 		buildingDTO.setLocation("yuhang");
 		buildingDTO.setPlate("no");
-		dataService.addDocument(buildingDTO);
+		BuildingDO result = dataService.addDocument(buildingDTO);
+		System.err.println(JSON.toJSONString(result));
 	}
 }
