@@ -1,6 +1,9 @@
 package org.data.service;
 
+import java.util.List;
+
 import org.common.model.BuildingDTO;
+import org.common.query.BuildingQuery;
 import org.data.model.db.BuildingDO;
 
 /**
@@ -10,4 +13,6 @@ import org.data.model.db.BuildingDO;
 public interface MongoDataService {
 
 	BuildingDO addDocument(BuildingDTO buildingDTO);
+	
+	List<BuildingDO> getByCondition(BuildingQuery query);
 }

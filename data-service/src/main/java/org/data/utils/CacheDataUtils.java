@@ -12,4 +12,6 @@ import org.data.model.db.BuildingDO;
 public class CacheDataUtils {
 
 	public static Map<String, BuildingDO> buildingNameDOMap = new HashMap<String, BuildingDO>();
+	
+	public static Map<String, BuildingDO> mongoBuildingNameDOMap = new HashMap<String, BuildingDO>();
 }
