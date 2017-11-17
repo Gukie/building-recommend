@@ -3,19 +3,15 @@ package org.data.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.common.enums.DataSourceTypeEnum;
 import org.common.enums.PlateTypeEnum;
 import org.common.model.BuildingAvgPriceDTO;
 import org.common.model.BuildingDTO;
 import org.common.query.BuildingQuery;
-import org.data.dao.BuildingDAO;
-import org.data.enums.DBTableEnum;
 import org.data.model.biz.BuildingAvgPriceDO;
 import org.data.model.db.BuildingDO;
 import org.data.service.DataService;
-import org.data.utils.CacheDataUtils;
-import org.data.utils.GeneratorUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -26,12 +22,6 @@ import org.springframework.util.CollectionUtils;
  */
 @Service("dataService")
 public class DataServiceImpl extends BaseDataServiceImpl implements DataService {
-
-	@Autowired
-	private BuildingDAO buildingDAO;
-
-	@Autowired
-	private GeneratorUtils generator;
 
 	@Override
 	@Transactional
@@ -44,11 +34,10 @@ public class DataServiceImpl extends BaseDataServiceImpl implements DataService 
 			return buildingId;
 		}
 
-		BuildingDO buildingDO = convert2DO(buildingDTO);
-		String id = generator.generateId(DBTableEnum.building);
-		buildingDO.setId(id);
+		BuildingDO buildingDO = generateNewBuilding(buildingDTO);
 		try {
 			buildingDAO.insert(buildingDO);
+			addBuildingIntoCache(buildingDO);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -56,18 +45,6 @@ public class DataServiceImpl extends BaseDataServiceImpl implements DataService 
 		return buildingDO.getId();
 	}
 
-	private void update(BuildingDTO buildingDTO, BuildingDO existingBuilding) {
-		String buildingId = existingBuilding.getId();
-		buildingDTO.setId(buildingId);
-		BeanUtils.copyProperties(buildingDTO, existingBuilding);
-		buildingDAO.update(existingBuilding);
-	}
-
-	private BuildingDO getBuildingFromCache(String buildingName) {
-		return CacheDataUtils.buildingNameDOMap.get(buildingName);
-	}
-
-	
 
 	@Override
 	public List<String> getExistingBuildingName() {
@@ -116,4 +93,9 @@ public class DataServiceImpl extends BaseDataServiceImpl implements DataService 
 		return dtoItem;
 	}
 
+
+	@Override
+	protected void initDataSource() {
+		dataSourceType = DataSourceTypeEnum.MySQL;
+	}
 }

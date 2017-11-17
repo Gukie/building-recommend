@@ -29,4 +29,9 @@ public interface DataServiceClient {
 	
 	@RequestMapping(value = "/createIndex", method = RequestMethod.POST,consumes={MediaType.APPLICATION_JSON_VALUE})
 	String createIndex(String buildingJsonStr);
+	
+	@RequestMapping(value = "/addDocument", method = RequestMethod.POST,consumes={MediaType.APPLICATION_JSON_VALUE})
+	String addDocument(String buildingJsonStr);
+	
+	
 }

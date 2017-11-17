@@ -1,10 +1,10 @@
-package org.common.enums.es;
+package org.common.enums;
 
 /**
  * @author gushu
  * @date 2017/11/09
  */
-public enum IndexEnum {
+public enum EsIndexEnum {
 
 	building(1,"building","doc","building desc");
 	
@@ -13,7 +13,7 @@ public enum IndexEnum {
 	private String type;  //索引下面的类型
 	private String desc;
 	
-	private IndexEnum(int code, String index,String type, String desc) {
+	private EsIndexEnum(int code, String index,String type, String desc) {
 		setCode(code);
 		setIndex(index);
 		setType(type);

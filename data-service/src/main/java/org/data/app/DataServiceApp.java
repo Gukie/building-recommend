@@ -16,6 +16,7 @@ import org.common.query.BuildingQuery;
 import org.common.result.BaseResult;
 import org.data.service.DataService;
 import org.data.service.ElkDataService;
+import org.data.service.MongoDataService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -48,13 +49,8 @@ public class DataServiceApp {
 	@Resource(name="elkDataService")
 	private ElkDataService elkDataService;
 
-	// @RequestMapping(value="/store",method=RequestMethod.POST)
-	// public String store(@RequestParam("buildingJsonStr") String
-	// buildingJsonStr) {
-	// @RequestMapping(value="/store",method=RequestMethod.POST,consumes =
-	// "application/json")
-	// public String store(@RequestParam("buildingJsonStr") String
-	// buildingJsonStr) {
+	@Resource(name="mongoDataService")
+	private MongoDataService mongoDataService;
 
 	/**
 	 * not work
@@ -95,6 +91,12 @@ public class DataServiceApp {
 		elkDataService.index(buildingDTO);
 		return BaseResult.SUCCESS;
 	}
+	
+	@RequestMapping(value = "/addDocument", method = RequestMethod.POST)
+	public String addDocument(@RequestBody BuildingDTO buildingDTO){
+		mongoDataService.addDocument(buildingDTO);
+		return BaseResult.SUCCESS;
+	}
 
 	@RequestMapping(value = "/getExistingBuildingName", method = RequestMethod.GET)
 	public String getExistingBuildingName() {
@@ -117,4 +119,6 @@ public class DataServiceApp {
 		BuildingQuery builidingQuery = JSON.parseObject(buildingQueryTxt, BuildingQuery.class);
 		return dataService.getBuildingByCondition(builidingQuery);
 	}
+	
+	
 }

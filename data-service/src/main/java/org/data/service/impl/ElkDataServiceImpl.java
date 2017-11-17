@@ -9,7 +9,8 @@ import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.message.BasicHeader;
 import org.common.constant.SpecialValues;
-import org.common.enums.es.IndexEnum;
+import org.common.enums.DataSourceTypeEnum;
+import org.common.enums.EsIndexEnum;
 import org.common.model.BuildingDTO;
 import org.data.enums.DBTableEnum;
 import org.data.service.ElkDataService;
@@ -105,7 +106,7 @@ public class ElkDataServiceImpl extends BaseDataServiceImpl implements ElkDataSe
 	public String index(BuildingDTO buildingDTO) {
 		String id = generator.generateId(DBTableEnum.building);
 		buildingDTO.setId(id);
-		IndexRequest request = new IndexRequest(IndexEnum.building.getIndex(), IndexEnum.building.getType(),
+		IndexRequest request = new IndexRequest(EsIndexEnum.building.getIndex(), EsIndexEnum.building.getType(),
 				buildingDTO.getId());
 		request.source(JSON.toJSONString(buildingDTO), XContentType.JSON);
 		try {
@@ -136,6 +137,11 @@ public class ElkDataServiceImpl extends BaseDataServiceImpl implements ElkDataSe
 		encodStr.append(password);
 		String encodedToken = Base64.getEncoder().encodeToString(encodStr.toString().getBytes());
 		return "Basic " + encodedToken;
+	}
+
+	@Override
+	protected void initDataSource() {
+		dataSourceType = DataSourceTypeEnum.ES;
 	}
 
 }

@@ -35,4 +35,21 @@ public class MongoDataServiceTest extends ServiceBaseTest{
 		BuildingDO result = dataService.addDocument(buildingDTO);
 		System.err.println(JSON.toJSONString(result));
 	}
+	
+	@Test
+	public void testDeleteAll(){
+		dataService.deleteAll();
+	}
+	
+	@Test
+	public void testUpdate(){
+		BuildingDTO buildingDTO = new BuildingDTO();
+		buildingDTO.setId("BD15109101593952");
+		buildingDTO.setAvgPrice(23333);
+		buildingDTO.setAvgPriceTxt("23333");
+		buildingDTO.setGmtModified(new Date());
+		buildingDTO.setName("江滨澜廷");
+		BuildingDO result = dataService.addDocument(buildingDTO);
+		System.err.println(JSON.toJSONString(result));
+	}
 }

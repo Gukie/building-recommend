@@ -79,8 +79,9 @@ public class CrawlServiceImpl implements CrawlService {
 				}
 				for(BuildingDTO item: buildingDTOList) {
 					String buildingJsonStr = JSON.toJSONString(item);
-					dataServiceClient.addBuilding(buildingJsonStr);
-					dataServiceClient.createIndex(buildingJsonStr);
+//					dataServiceClient.addBuilding(buildingJsonStr);
+//					dataServiceClient.createIndex(buildingJsonStr);
+					dataServiceClient.addDocument(buildingJsonStr);
 					System.out.println("added:"+PoolUtils.ADDED_COUNTER.incrementAndGet());
 				}
 			} catch (InterruptedException e) {
