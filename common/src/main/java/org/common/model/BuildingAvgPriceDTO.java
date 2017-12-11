@@ -27,7 +27,7 @@ public class BuildingAvgPriceDTO {
 	}
 
 	public Double getAvgPrice() {
-		return avgPrice;
+		return Math.ceil(avgPrice);
 	}
 
 	public void setAvgPrice(Double avgPrice) {

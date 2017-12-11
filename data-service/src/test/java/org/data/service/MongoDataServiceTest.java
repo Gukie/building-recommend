@@ -1,9 +1,12 @@
 package org.data.service;
 
 import java.util.Date;
+import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 
+import org.common.enums.PlateTypeEnum;
+import org.common.model.BuildingAvgPriceDTO;
 import org.common.model.BuildingDTO;
 import org.data.enums.DBTableEnum;
 import org.data.model.db.BuildingDO;
@@ -51,5 +54,21 @@ public class MongoDataServiceTest extends ServiceBaseTest{
 		buildingDTO.setName("江滨澜廷");
 		BuildingDO result = dataService.addDocument(buildingDTO);
 		System.err.println(JSON.toJSONString(result));
+	}
+	
+	@Test
+	public void testGetAvgPriceByPlateType(){
+		List<BuildingAvgPriceDTO>  result = dataService.getAvgPriceByPlateType(PlateTypeEnum.PER);
+		org.junit.Assert.assertNotNull(result);
+		for(BuildingAvgPriceDTO item: result){
+			System.err.println(item.getPlate()+":"+item.getAvgPrice());
+		}
+		
+		try {
+			Thread.sleep(Integer.MAX_VALUE);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

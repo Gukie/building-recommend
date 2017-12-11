@@ -1,5 +1,9 @@
 package org.data.service;
 
+import java.util.List;
+
+import org.common.enums.PlateTypeEnum;
+import org.common.model.BuildingAvgPriceDTO;
 import org.common.model.BuildingDTO;
 import org.data.model.db.BuildingDO;
 
@@ -12,4 +16,6 @@ public interface MongoDataService {
 	BuildingDO addDocument(BuildingDTO buildingDTO);
 	
 	void deleteAll();
+	
+	List<BuildingAvgPriceDTO> getAvgPriceByPlateType(PlateTypeEnum plateType);
 }

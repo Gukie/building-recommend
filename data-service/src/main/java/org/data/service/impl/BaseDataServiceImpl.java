@@ -11,7 +11,6 @@ import org.common.model.BuildingDTO;
 import org.data.dao.BuildingDAO;
 import org.data.enums.DBTableEnum;
 import org.data.model.db.BuildingDO;
-import org.data.repository.MongoBuildingRepository;
 import org.data.utils.CacheDataUtils;
 import org.data.utils.GeneratorUtils;
 import org.springframework.beans.BeanUtils;
@@ -30,8 +29,8 @@ public abstract class BaseDataServiceImpl {
 	@Autowired
 	protected BuildingDAO buildingDAO;
 	
-	@Autowired
-	protected MongoBuildingRepository mongoRepository;
+//	@Autowired
+//	protected MongoBuildingRepository mongoRepository;
 	
 	@Autowired
 	protected GeneratorUtils generator;
@@ -39,7 +38,7 @@ public abstract class BaseDataServiceImpl {
 	protected DataSourceTypeEnum dataSourceType;
 	
 	@Autowired
-	private MongoOperations mongoOperations;
+	protected MongoOperations mongoOperations;
 	
 	@PostConstruct
 	protected abstract void initDataSource() ;
