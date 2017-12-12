@@ -2,6 +2,7 @@ package org.data.utils;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.lang.StringUtils;
 import org.data.enums.DBTableEnum;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +17,14 @@ public class GeneratorUtils {
 
 	public String generateId(DBTableEnum tableEnum) {
 		StringBuilder result = new StringBuilder();
-		String prefix = tableEnum.getValue();
-		result.append(prefix).append(System.currentTimeMillis()).append(counter.incrementAndGet());
+		String prefix = null;
+		if(tableEnum != null){
+			prefix = tableEnum.getValue();
+		}
+		if(StringUtils.isNotBlank(prefix)){
+			result.append(prefix);
+		}
+		result.append(System.currentTimeMillis()).append(counter.incrementAndGet());
 		return result.toString();
 	}
 	

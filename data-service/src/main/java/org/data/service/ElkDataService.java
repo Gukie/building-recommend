@@ -1,5 +1,8 @@
 package org.data.service;
 
+import java.util.List;
+
+import org.common.model.BuildingAvgPriceDTO;
 import org.common.model.BuildingDTO;
 
 /**
@@ -15,4 +18,11 @@ public interface ElkDataService {
 	 * @return index id, which is buildingId
 	 */
 	String index(BuildingDTO buildingDTO);
+
+	/**
+	 * create average price index.
+	 * @param buildingAvgPriceList
+	 * @return
+	 */
+	String indexAvgPrice(List<BuildingAvgPriceDTO> buildingAvgPriceList);
 }

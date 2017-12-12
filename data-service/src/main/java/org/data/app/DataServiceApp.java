@@ -121,4 +121,9 @@ public class DataServiceApp {
 	}
 	
 	
+	@RequestMapping(value="/uploadMongoAvgPrice2Elk")
+	public @ResponseBody String uploadMongoAvgPrice2Elk(){
+		List<BuildingAvgPriceDTO> buildingAvgPriceList = mongoDataService.getAvgPriceByPlateType(PlateTypeEnum.PER);
+		return elkDataService.indexAvgPrice(buildingAvgPriceList);
+	}
 }

@@ -6,7 +6,8 @@ package org.common.enums;
  */
 public enum EsIndexEnum {
 
-	building(1,"building","doc","building desc");
+	building(1,"building","doc","building desc"),
+	avg_price(2,"avg_price","doc","average price index");
 	
 	private int code;
 	private String index; //索引

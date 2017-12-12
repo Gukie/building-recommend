@@ -2,16 +2,20 @@ package org.data.service.impl;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.message.BasicHeader;
 import org.common.constant.SpecialValues;
 import org.common.enums.DataSourceTypeEnum;
 import org.common.enums.EsIndexEnum;
+import org.common.model.BuildingAvgPriceDTO;
 import org.common.model.BuildingDTO;
+import org.common.result.BaseResult;
 import org.data.enums.DBTableEnum;
 import org.data.service.ElkDataService;
 import org.data.utils.GeneratorUtils;
@@ -25,6 +29,7 @@ import org.elasticsearch.common.xcontent.XContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author gushu
@@ -42,7 +47,7 @@ public class ElkDataServiceImpl extends BaseDataServiceImpl implements ElkDataSe
 	private String password;
 	private RestHighLevelClient restClient;
 	private RestClient lowLevelClient;
-	
+
 	@Autowired
 	private GeneratorUtils generator;
 
@@ -106,9 +111,16 @@ public class ElkDataServiceImpl extends BaseDataServiceImpl implements ElkDataSe
 	public String index(BuildingDTO buildingDTO) {
 		String id = generator.generateId(DBTableEnum.building);
 		buildingDTO.setId(id);
-		IndexRequest request = new IndexRequest(EsIndexEnum.building.getIndex(), EsIndexEnum.building.getType(),
-				buildingDTO.getId());
-		request.source(JSON.toJSONString(buildingDTO), XContentType.JSON);
+		String sourceJsonStr = JSON.toJSONString(buildingDTO);
+		return doIndex(id, sourceJsonStr, EsIndexEnum.building);
+	}
+
+	private String doIndex( String sourceJsonStr, EsIndexEnum indexEnum) {
+		return doIndex(null, sourceJsonStr, indexEnum);
+	}
+	private String doIndex(String docId, String sourceJsonStr, EsIndexEnum indexEnum) {
+		IndexRequest request = generateIndexRequest(docId, indexEnum);
+		request.source(sourceJsonStr, XContentType.JSON);
 		try {
 			Header header = new BasicHeader("Authorization", generateToken());
 			IndexResponse response = restClient.index(request, header);
@@ -120,6 +132,13 @@ public class ElkDataServiceImpl extends BaseDataServiceImpl implements ElkDataSe
 			e.printStackTrace();
 		}
 		return SpecialValues.EMPTY_STR;
+	}
+
+	private IndexRequest generateIndexRequest(String docId, EsIndexEnum indexEnum) {
+		if (StringUtils.isBlank(docId)) {
+			return new IndexRequest(indexEnum.getIndex(), indexEnum.getType());
+		}
+		return new IndexRequest(indexEnum.getIndex(), indexEnum.getType(), docId);
 	}
 
 	/**
@@ -144,4 +163,16 @@ public class ElkDataServiceImpl extends BaseDataServiceImpl implements ElkDataSe
 		dataSourceType = DataSourceTypeEnum.ES;
 	}
 
+	@Override
+	public String indexAvgPrice(List<BuildingAvgPriceDTO> buildingAvgPriceList) {
+		if (CollectionUtils.isEmpty(buildingAvgPriceList)) {
+			return BaseResult.SUCCESS;
+		}
+		for(BuildingAvgPriceDTO item: buildingAvgPriceList){
+			String sourceJsonStr = JSON.toJSONString(item);
+			String indexId = doIndex(sourceJsonStr, EsIndexEnum.avg_price);
+			logger.debug("indexed:{}",indexId);
+		}
+		return BaseResult.SUCCESS;
+	}
 }
