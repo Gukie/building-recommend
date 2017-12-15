@@ -1,6 +1,5 @@
 package org.data.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.common.enums.DataSourceTypeEnum;
@@ -81,10 +80,7 @@ public class MongoDataServiceImpl extends BaseDataServiceImpl implements MongoDa
 
 	@Override
 	public List<BuildingDTO> getAllData() {
-		List<BuildingDTO> result = new ArrayList<>();
-		
-		
-		
-		return result;
+		List<BuildingDO> allBuildingDOList = mongoOperations.findAll(BuildingDO.class);
+		return  convert2DTO(allBuildingDOList);
 	}
 }
