@@ -18,4 +18,6 @@ public interface MongoDataService {
 	void deleteAll();
 	
 	List<BuildingAvgPriceDTO> getAvgPriceByPlateType(PlateTypeEnum plateType);
+
+	List<BuildingDTO> getAllData();
 }

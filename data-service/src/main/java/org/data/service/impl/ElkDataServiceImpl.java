@@ -20,6 +20,8 @@ import org.data.enums.DBTableEnum;
 import org.data.service.ElkDataService;
 import org.data.utils.GeneratorUtils;
 import org.elasticsearch.action.DocWriteResponse.Result;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RestClient;
@@ -174,5 +176,34 @@ public class ElkDataServiceImpl extends BaseDataServiceImpl implements ElkDataSe
 			logger.debug("indexed:{}",indexId);
 		}
 		return BaseResult.SUCCESS;
+	}
+
+	@Override
+	public String indexBuildingList(List<BuildingDTO> allBuildingData) {
+		if(CollectionUtils.isEmpty(allBuildingData)){
+			return BaseResult.SUCCESS;
+		}
+		BulkRequest bulkRequest = generateBuildingBulkRequest(allBuildingData);
+		try {
+			Header header = new BasicHeader("Authorization", generateToken());
+			BulkResponse response = restClient.bulk(bulkRequest, header);
+			if (response.hasFailures()) {
+				logger.debug("index failed");
+				return BaseResult.FAIL;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return BaseResult.SUCCESS;
+	}
+
+	private BulkRequest generateBuildingBulkRequest(List<BuildingDTO> allBuildingData) {
+		BulkRequest bulkRequest = new BulkRequest();
+		for(BuildingDTO item: allBuildingData){
+			IndexRequest request = generateIndexRequest(item.getId(), EsIndexEnum.building);
+			request.source(JSON.toJSONString(item), XContentType.JSON);
+			bulkRequest.add(request);
+		}
+		return bulkRequest;
 	}
 }

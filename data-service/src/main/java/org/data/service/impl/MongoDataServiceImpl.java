@@ -1,5 +1,6 @@
 package org.data.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.common.enums.DataSourceTypeEnum;
@@ -76,5 +77,14 @@ public class MongoDataServiceImpl extends BaseDataServiceImpl implements MongoDa
 		TypedAggregation<BuildingDTO> aggregation = new TypedAggregation<>(BuildingDTO.class,aggregationOperationArr);
 		AggregationResults<BuildingAvgPriceDTO> aggregationResults = mongoOperations.aggregate(aggregation,MongoCollectionEnum.building.name(), BuildingAvgPriceDTO.class);
 		return aggregationResults.getMappedResults();
+	}
+
+	@Override
+	public List<BuildingDTO> getAllData() {
+		List<BuildingDTO> result = new ArrayList<>();
+		
+		
+		
+		return result;
 	}
 }

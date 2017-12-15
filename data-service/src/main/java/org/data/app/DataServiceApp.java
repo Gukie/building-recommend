@@ -126,4 +126,10 @@ public class DataServiceApp {
 		List<BuildingAvgPriceDTO> buildingAvgPriceList = mongoDataService.getAvgPriceByPlateType(PlateTypeEnum.PER);
 		return elkDataService.indexAvgPrice(buildingAvgPriceList);
 	}
+	
+	@RequestMapping(value="/uploadMongoData2Elk")
+	public @ResponseBody String uploadMongoData2Elk(){
+		List<BuildingDTO> allBuildingData = mongoDataService.getAllData();
+		return elkDataService.indexBuildingList(allBuildingData);
+	}
 }

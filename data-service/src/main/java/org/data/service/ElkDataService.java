@@ -25,4 +25,6 @@ public interface ElkDataService {
 	 * @return
 	 */
 	String indexAvgPrice(List<BuildingAvgPriceDTO> buildingAvgPriceList);
+
+	String indexBuildingList(List<BuildingDTO> allBuildingData);
 }
