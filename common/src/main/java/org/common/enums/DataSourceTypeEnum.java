@@ -6,5 +6,5 @@ package org.common.enums;
  */
 public enum DataSourceTypeEnum {
 
-	MySQL,MongoDB, ES
+	MySQL,MongoDB, ES, Redis
 }

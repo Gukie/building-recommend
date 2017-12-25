@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.common.enums.DataSourceTypeEnum;
+import org.common.enums.RedisKeyEnum;
 import org.common.model.BuildingDTO;
 import org.data.dao.BuildingDAO;
 import org.data.enums.DBTableEnum;
@@ -18,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -39,6 +42,11 @@ public abstract class BaseDataServiceImpl {
 	
 	@Autowired
 	protected MongoOperations mongoOperations;
+	
+	@Autowired
+	protected StringRedisTemplate redisTemplate;
+	
+	protected HashOperations<String, Object, Object> redisHashOperations;
 	
 	@PostConstruct
 	protected abstract void initDataSource() ;
@@ -111,5 +119,9 @@ public abstract class BaseDataServiceImpl {
 		if(DataSourceTypeEnum.MySQL == dataSourceType){
 			CacheDataUtils.buildingNameDOMap.put(name, buildingDO);
 		}
+		if(DataSourceTypeEnum.Redis == dataSourceType){
+			redisHashOperations.put(RedisKeyEnum.buildingNameId.getValue(), buildingDO.getName(), buildingDO.getId());
+		}
 	}
+
 }

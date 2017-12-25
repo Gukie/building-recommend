@@ -32,6 +32,8 @@ public interface DataServiceClient {
 	
 	@RequestMapping(value = "/addDocument", method = RequestMethod.POST,consumes={MediaType.APPLICATION_JSON_VALUE})
 	String addDocument(String buildingJsonStr);
-	
+
+	@RequestMapping(value="addDoc2Redis",method=RequestMethod.POST,consumes={MediaType.APPLICATION_JSON_VALUE})
+	String addDoc2Redis(String buildingJsonStr);
 	
 }

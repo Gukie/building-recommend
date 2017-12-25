@@ -22,10 +22,26 @@ public class BuildingCache {
 	@Autowired
 	private MongoBuildingRepository mongoRep;
 	
+//	@Autowired
+//	private StringRedisTemplate redisTemplate;
+//	
+//	private HashOperations<String, Object, Object> redisHashOperations;
+	
 	public void init(){
 		initMysqlCache();
 		initMongoCache();
+//		initRedisCache();
 	}
+
+//	private void initRedisCache() {
+//		redisHashOperations = redisTemplate.opsForHash();
+//		Map<Object, Object> existingDatas = redisHashOperations.entries(RedisKeyEnum.building.getValue());
+//		if(CollectionUtils.isEmpty(existingDatas)){
+//			return;
+//		}
+//		
+//		
+//	}
 
 	private void initMongoCache() {
 		List<BuildingDO> buildingDOList = mongoRep.findAll();

@@ -81,7 +81,8 @@ public class CrawlServiceImpl implements CrawlService {
 					String buildingJsonStr = JSON.toJSONString(item);
 //					dataServiceClient.addBuilding(buildingJsonStr);
 //					dataServiceClient.createIndex(buildingJsonStr);
-					dataServiceClient.addDocument(buildingJsonStr);
+//					dataServiceClient.addDocument(buildingJsonStr);
+					dataServiceClient.addDoc2Redis(buildingJsonStr);
 					System.out.println("added:"+PoolUtils.ADDED_COUNTER.incrementAndGet());
 				}
 			} catch (InterruptedException e) {

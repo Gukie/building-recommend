@@ -17,6 +17,7 @@ import org.common.result.BaseResult;
 import org.data.service.DataService;
 import org.data.service.ElkDataService;
 import org.data.service.MongoDataService;
+import org.data.service.RedisDataSource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -51,6 +52,9 @@ public class DataServiceApp {
 
 	@Resource(name="mongoDataService")
 	private MongoDataService mongoDataService;
+	
+	@Resource(name="redisDataSource")
+	private RedisDataSource redisDataSource;
 
 	/**
 	 * not work
@@ -131,5 +135,11 @@ public class DataServiceApp {
 	public @ResponseBody String uploadMongoData2Elk(){
 		List<BuildingDTO> allBuildingData = mongoDataService.getAllData();
 		return elkDataService.indexBuildingList(allBuildingData);
+	}
+	
+	@RequestMapping(value="/addDoc2Redis", method=RequestMethod.POST)
+	public String addDoc2Redis(@RequestBody BuildingDTO buildingDTO){
+		redisDataSource.createOrUpdate(buildingDTO);
+		return BaseResult.SUCCESS;
 	}
 }
